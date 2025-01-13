@@ -134,10 +134,10 @@ class Appointment(models.Model):
     notes = models.CharField(max_length=2000, blank=True)
     total_price = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     total_time = models.DurationField(default=timedelta(0))  # Хранит общее время
-    date = models.DateField(null=True, blank=True,)
-    start_time = models.TimeField(blank=True, null=True)
-    end_time = models.TimeField(blank=True, null=True)
-    end_time_after_break = models.TimeField(blank=True, null=True)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    end_time_after_break = models.TimeField()
     status = models.CharField(choices=CHOICES, default='not_complete', max_length=12)
     session_key = models.CharField(max_length=40, null=True, blank=True)  # Хранение ключа сессии для связи
 
@@ -161,16 +161,21 @@ class Appointment(models.Model):
         datetime_obj2 = datetime_obj1 + delta_break
         return datetime_obj1.time(), datetime_obj2.time()
     
-    def save(self, *args, **kwargs) :
-        # Сохраняем объект, если он создаётся впервые
+    def save(self, *args, **kwargs):
+        # Проверяем, создается ли объект впервые
         is_new = self.pk is None
+
+        # Сохраняем объект, чтобы он получил ID
         super().save(*args, **kwargs)
 
+        # Выполняем расчеты только после получения ID
         if self.services.exists() or is_new:
             self.total_price = self.calculate_total_price(self.services.all())
             self.total_time = self.calculate_total_time(self.services.all())
-            self.end_time, self.end_time_after_break = self.add_time_and_timedelta(self.start_time, self.total_time, BREAK_AFTER_WORK)
-        
+            self.end_time, self.end_time_after_break = self.add_time_and_timedelta(
+                self.start_time, self.total_time, BREAK_AFTER_WORK
+            )
+            # Сохраняем изменения, указав только измененные поля
             super().save(update_fields=['total_price', 'total_time', 'end_time', 'end_time_after_break'])
 
         

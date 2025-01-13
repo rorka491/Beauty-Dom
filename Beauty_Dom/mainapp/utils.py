@@ -140,10 +140,12 @@ def get_service_names(service_ids):
     return names
 
 
-def generate_time_slots(start_time, end_time, total_time):
+def generate_time_slots(start_time, end_time, total_time=None):
     # Преобразуем start_time и end_time в datetime
     start = datetime.combine(datetime.today(), start_time)
-    end = datetime.combine(datetime.today(), end_time) - total_time
+    if total_time:
+        end = datetime.combine(datetime.today(), end_time) - total_time
+    end = datetime.combine(datetime.today(), end_time)
     
     time_slots = []
     
