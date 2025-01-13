@@ -392,7 +392,8 @@ class RecoverPasswordStep2(FormView):
 def func():
     pass 
 
-
+def func2():
+    pass 
 
 
 
