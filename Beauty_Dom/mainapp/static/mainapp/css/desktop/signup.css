@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.divform {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px;
+    border: 2px solid #EFA3B0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+}
+
+
+form p {
+    margin-bottom: 15px;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background: linear-gradient(to left, #A0BDD4, #D9929F);
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
+    color: #EFA3B0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.logo-container {
+    text-align: center; /* Центрирует содержимое внутри контейнера */
+    margin-bottom: 20px; /* Добавляет отступ снизу для разделения с формой */
+}
+
+.logo-container img {
+    max-width: 100%; /* Уменьшает размер изображения, если оно превышает ширину контейнера */
+    height: auto; /* Сохраняет пропорции изображения */
+}
+
+h2 {
+    font-weight: 300; /* Чем меньше значение, тем тоньше текст */
+}
+
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Два столбца */
+    gap: 20px; /* Расстояние между столбцами и строками */
+}
+
+.form-grid p,
+.form-grid input,
+.form-grid button {
+    margin: 0;
+    width: 100%;
+}

@@ -1,0 +1,42 @@
+{% load static %}
+
+{%  block extrastyles %} 
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/signup.css' %}" media="screen and (min-width: 769px)">
+<link rel="stylesheet" href="{% static 'mainapp/css/mobile/signup.css' %}" media="screen and (max-width: 768px)">
+{% endblock %}
+
+
+<!DOCTYPE html>
+<html lang="ru" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+
+
+<body>
+    <div class="divform"> 
+        <div class="logo-container">
+            <img src="{% static 'mainapp/images/Логотип.png' %}" alt="Beauty_Dom">
+        </div>
+        <h2>Регистрация</h2>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Регистрация</button>
+        </form>
+        
+        <p>Есть аккаунт?<a href="{% url 'login' %}"> Войти</a></p>
+        <p><a href="{% url 'recover_password1' %}">Забыли пароль</a></p>
+    </div>
+</body>
+</html>

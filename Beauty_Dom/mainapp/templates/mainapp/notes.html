@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Запись на прием</title>
+{% endblock %}
+
+{%  block extrastyles %} 
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/appointment.css' %}"/>
+{% endblock %}
+
+
+{% block content %}
+{% if user.is_authenticated and not user.is_superuser %}
+<form method="post">
+    <div class="form-header">
+        <h1 class="form-title">Запись на прием</h1>
+
+        <div class="steps">
+            <div class="step active"></div>
+            <div class="step active"></div>
+            <div class="step"></div>
+        </div>
+    </div>
+    <div class="form-inside">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="container-btns">
+            <a href="{% url 'appointment_step1' %}">
+                <button type="button" class="btn left">Назад</button>
+            </a>
+            <button type="submit" class="btn right">Далее</button>
+        </div>
+    </div>
+</form>
+{% else %}
+    <p class="centered-text">Авторизуйтесь чтобы записаться на прием &#128521;</p>
+{% endif %}
+
+
+
+{% endblock %}

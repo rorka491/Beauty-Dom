@@ -1,0 +1,70 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>{{ title }}</title>
+{% endblock %}
+
+{%  block extrastyles %} 
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/profile.css' %}" media="screen and (min-width: 769px)">
+{% endblock %}
+
+
+
+{% block content %}
+
+
+
+{% if user.is_authenticated and not user.is_superuser %}
+<div class="container">
+
+        <div class="col">
+            <div class="appointments-container">
+                <h2>Мои записи</h2>
+                {% if my_appointments %}
+                <div class="appointment">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Цена</th>
+                                <th>Длительность</th>
+                                <th>Дата</th>
+                                <th>Время начала</th>
+                                <th>Время окончания</th>
+                                <th>Услуги</th>
+                            </tr>
+                        </thead>
+                        {% for appointment in my_appointments %}
+                        <tbody>
+                            <td>{{ appointment.total_price }} &#x20BD;</td>
+                            <td>{{ appointment.total_time }}</td>
+                            <td>{{ appointment.date }}</td>
+                            <td>{{ appointment.start_time }}</td>
+                            <td>{{ appointment.end_time }}</td>
+                            <td>
+                                {% for service in appointment.services.all %}
+                                <ul style="list-style-type: none;">
+                                    <li>
+                                        {{ service.name }}
+                                    </li>
+                                </ul>
+                                {% endfor %}
+                            </td>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% else %}
+                <div class="appointment">
+                    <p>У вас нет актуальных записей</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+{% endblock %}
