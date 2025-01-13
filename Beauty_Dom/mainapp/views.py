@@ -389,12 +389,6 @@ class RecoverPasswordStep2(FormView):
             messages.error(self.request, 'Пароли не совпадают')
             return super().form_invalid(form)
 
-def func():
-    pass 
-
-def func2():
-    pass 
-
 
 
 
