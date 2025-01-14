@@ -9,62 +9,79 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'mainapp/css/desktop/base.css' %}" media="screen">
-
 </head>
 <body>
     <div class="wrapper">
     <header>
-        <img src="{% static 'mainapp/images/Логотип.jpg' %}" alt="Beauty_Dom">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <!-- Логотип -->
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'mainapp/images/Логотип.jpg' %}" alt="Beauty_Dom" height="50">
+                </a>
 
-        <nav>
-            <ul>
-                <li><a href="{% url 'index' %}" class="{% if request.path == '/' %}active{% endif %} btn border-0" style="outline: none; box-shadow: none;">Главная</a></li>
-                <li><a href="{% url 'appointment_step1' %}" class="{% if '/appointment_step' in request.path %}active{% endif %} btn border-0">Запись на прием</a></li>
-                <li><a href="{% url 'about' %}" class= "{% if request.path == '/about/' %}active{% endif %} btn border-0">О нас</a></li>
-                <li><a href="{% url 'reviews' %}" class= "{% if request.path == '/reviews/' %}active{% endif %} btn border-0">Отзывы</a></li>
-                {% if user.is_authenticated and not user.is_superuser %}
-                <!-- <li><a href="{% url 'profileuser' %}" class="{% if request.path == '/profileuser/' %}active{% endif %}">Профиль</a></li> -->
-                <!-- Кнопка для открытия меню -->
-                <li>
-                    <button class="btn border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-expanded="false" aria-controls="menu">
-                        Профиль
-                    </button>
-                    
-                </li>
-                
-                {% else %}
-                <li><a href="{% url 'login' %}" class="btn border-0">Вход</a></li>
-                <li><a href="{% url 'signup' %}" class="btn border-0">Регистрация</a></li>
-                {% endif %}
-            </ul>
-            <!-- Выдвигающееся меню -->
-            
-            <div class="collapse " id="menu">
-                <div class="card card-body">
-                <ul>
-                    <li><a href="{% url 'profileuser' %}" class="{% if request.path == '/profileuser/' %}active{% endif %} btn border-0">Профиль</a></li>
-                    <li><a href="{% url 'my_appointments' %}" class="{% if request.path == '/my_appointments/' %}active{% endif %} btn border-0">Мои записи</a></li>
-                </ul>
+                <!-- Кнопка для мобильного меню -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Меню -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'appointment_step1' %}" class="nav-link {% if '/appointment_step' in request.path %}active{% endif %}">Запись на прием</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}">О нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'reviews' %}" class="nav-link {% if request.path == '/reviews/' %}active{% endif %}">Отзывы</a>
+                        </li>
+
+                        {% if user.is_authenticated and not user.is_superuser %}
+                            <!-- Выдвигающееся меню для профиля -->
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-link nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Профиль
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'profileuser' %}" class="dropdown-item {% if request.path == '/profileuser/' %}active{% endif %}">Профиль</a></li>
+                                    <li><a href="{% url 'my_appointments' %}" class="dropdown-item {% if request.path == '/my_appointments/' %}active{% endif %}">Мои записи</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'login' %}" class="nav-link">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'signup' %}" class="nav-link">Регистрация</a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
-    
+
     <div class="content">
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
     </div>
 
     <footer class="site-footer">
-            <div class="footer-content">
-                <p>&copy; 2024 Beauty_Dom</p>
-                <ul class="footer-links">
-                    <li><a href="#">Контакты</a></li>
-                    <li><a href="#">Политика конфиденциальности</a></li>
-                    <li><a href="{% static 'mainapp/docs/terms.pdf' %}" target="_blank">Условаия использования</a></li>
-                </ul>
-            </div>
+        <div class="footer-content">
+            <p>&copy; 2024 Beauty_Dom</p>
+            <ul class="footer-links">
+                <li><a href="#">Контакты</a></li>
+                <li><a href="#">Политика конфиденциальности</a></li>
+                <li><a href="{% static 'mainapp/docs/terms.pdf' %}" target="_blank">Условия использования</a></li>
+            </ul>
+        </div>
     </footer>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
