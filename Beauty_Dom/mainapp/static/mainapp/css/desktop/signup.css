@@ -13,8 +13,9 @@ body {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    width: 500px;
+    max-width: 600px;
     border: 2px solid #EFA3B0;
+    width: 100%;
 }
 
 h1 {
@@ -23,15 +24,14 @@ h1 {
     font-size: 24px;
 }
 
-
 form p {
     margin-bottom: 15px;
 }
 
 input[type="text"], input[type="password"], input[type="email"] {
     width: 100%;
+    margin-bottom: 20px;
     padding: 10px;
-    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -42,7 +42,7 @@ button {
     background: linear-gradient(to left, #B1CDE2, #EFA3B0);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 5px !important;
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
@@ -58,7 +58,7 @@ p {
 }
 
 a {
-    color: #EFA3B0;
+    color: #EFA3B0 !important;
     text-decoration: none;
 }
 
@@ -80,16 +80,21 @@ h2 {
     font-weight: 300; /* Чем меньше значение, тем тоньше текст */
 }
 
-
+/* 
 .form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Два столбца */
-    gap: 20px; /* Расстояние между столбцами и строками */
-}
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+} */
 
-.form-grid p,
+/* .form-grid p,
 .form-grid input,
 .form-grid button {
     margin: 0;
     width: 100%;
+} */
+ 
+.container, .row {
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0;  /* Убираем внешние отступы */
 }
