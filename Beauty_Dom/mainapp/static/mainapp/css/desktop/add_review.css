@@ -6,6 +6,17 @@ textarea {
 
 .form-header-container {
     text-align: center;
+    padding-left: 10px;
+}
+
+.form-title {
+    white-space: nowrap;  /* Отключает перенос строки */
+    text-align: left;  
+}
+
+.form-container {
+    width: 100%;
+    max-width: 600px;
 }
 
 .form-header {
@@ -21,8 +32,8 @@ textarea {
 
 /* Стиль формы */
 form {
-    width: calc(100% - 40px); /* Уменьшаем ширину формы и добавляем отступы */
-    max-width: 500px;
+    width: 100%;
+    max-width: 800px;
     background: #ffffff;
     border-radius: 15px;
     padding: 20px;
@@ -43,19 +54,7 @@ form {
     font-family: 'Raleway', sans-serif;
 }
 
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    background: #fff;
-    color: #101010;
-    box-sizing: border-box;
-}
 
-.form-control:focus {
-    outline: none;
-}
 
 /* Стиль для кнопки */
 .btn-primary {
