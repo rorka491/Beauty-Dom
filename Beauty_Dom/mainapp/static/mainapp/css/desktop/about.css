@@ -1,6 +1,7 @@
 /* Стили для карточки */
 .content-block {
-    width: 800px;
+    max-width: 800px;
+    width: 100%;
     height: 500px; /* Ширина карточки увеличена в два раза */
     background: linear-gradient(to left, #B1CDE2, #EFA3B0); /* Градиентная линия */ /* Градиент фона карточки */
     border-radius: 15px; /* Закругленные углы карточки */
