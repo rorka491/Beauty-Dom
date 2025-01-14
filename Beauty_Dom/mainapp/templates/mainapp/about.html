@@ -12,32 +12,7 @@
 
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <!-- Логотип -->
-        <img src="{% static 'mainapp/images/Логотип.jpg' %}" alt="Beauty_Dom">
 
-        <!-- Кнопка "Бургер" для мобильных устройств -->
-        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Навигационное меню -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/profileuser/' %}active{% endif %}" href="{% url 'profileuser' %}">Профиль</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/my_appointments/' %}active{% endif %}" href="{% url 'my_appointments' %}">Мои записи</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 
     {% for profile in profiles %}
