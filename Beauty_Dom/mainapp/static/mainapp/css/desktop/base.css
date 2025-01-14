@@ -45,7 +45,7 @@ header::after {
     text-align: center; /* Центрирование текста */
     /* Убедись, что у контейнера есть фиксированная высота или min-height */
     min-height: 80vh; /* Минимальная высота 80% от высоты окна */
-    margin-top: 50px;
+    margin-top: 80px;
 }
 
 header::after {
