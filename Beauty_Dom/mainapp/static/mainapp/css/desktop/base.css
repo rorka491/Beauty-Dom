@@ -9,7 +9,7 @@ body {
     color: #333; /* Цвет текста по умолчанию */
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
 }
 
 /* Стили для header */

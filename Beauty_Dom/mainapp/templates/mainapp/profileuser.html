@@ -6,7 +6,7 @@
 {% endblock %}
 
 {%  block extrastyles %} 
-<link rel="stylesheet" href="{% static 'mainapp/css/desktop/profile.css' %}" media="screen and (min-width: 769px)">
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/profile.css' %}" media="screen">
 {% endblock %}
 
 
@@ -18,7 +18,7 @@
 {% if user.is_authenticated and not user.is_superuser %}
 <div class="container">
     <div class="row align-items-stretch">
-        <div class="col-3">
+        <div class="col-12">
             <div class="user-container">    
                 <h2>Профиль пользователя</h2>
                 <div>
