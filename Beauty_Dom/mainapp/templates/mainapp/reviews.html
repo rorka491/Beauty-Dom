@@ -12,62 +12,64 @@
 
 
 {% block content %}
-{% if reviews %}
-    <div class="reviews-container">
-        <h2 class="form-header">Наш рейтинг {{ total_rating|floatformat:2 }}</h2>
-        {% for review in reviews %}
-        <div class="review-block">
-            <div class="review-header">
-                <strong>{{ review.user.username }}</strong>
-                <div class="review-rating">
-                    {% for i in "12345" %}
-                        <span class="star{% if i|add:0 <= review.rating %} filled{% endif %}">&#9733;</span>
-                    {% endfor %}
+<div class="container mt-4">
+    {% if reviews %}
+        <div class="reviews-container">
+            <h2 class="form-header">Наш рейтинг {{ total_rating|floatformat:2 }}</h2>
+            {% for review in reviews %}
+            <div class="review-block ">
+                <div class="review-header ">
+                    <strong>{{ review.user.username }}</strong>
+                    <div class="review-rating">
+                        {% for i in "12345" %}
+                            <span class="star{% if i|add:0 <= review.rating %} filled{% endif %}">&#9733;</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="review-content">
+                    <hr class="review-divider">
+                    <p>{{ review.notes }}</p>
+                    <hr class="review-divider">
+                </div>
+                <div class="review-footer">
+                    <small>{{ review.created_at|date:"d M Y H:i" }}</small>
                 </div>
             </div>
-            <div class="review-content">
-                <hr class="review-divider">
-                <p>{{ review.notes }}</p>
-                <hr class="review-divider">
-            </div>
-            <div class="review-footer">
-                <small>{{ review.created_at|date:"d M Y H:i" }}</small>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <p class="centered-text"> Пока тут нет отзывов, но вы можете сделать первый отзыв &#128521;</p>
-{% endif %}
+    {% else %}
+        <p class="centered-text"> Пока тут нет отзывов, но вы можете сделать первый отзыв &#128521;</p>
+    {% endif %}
 
-{% if user.is_authenticated and not user.is_superuser %}
-    <div class="review-button">
-        <a href="{% url 'add_review' %}" class="btn btn-review text-white">+ Оставить отзыв</a>
-    </div>
-{% else %}
-    <div class="review-button">
-        <a href="{% url 'login' %}" class="btn btn-review text-white">Авторизуйтесь чтобы оставить отзыв</a>
-    </div>
-{% endif %}
+    {% if user.is_authenticated and not user.is_superuser %}
+        <div class="review-button">
+            <a href="{% url 'add_review' %}" class="btn btn-review text-white">+ Оставить отзыв</a>
+        </div>
+    {% else %}
+        <div class="review-button">
+            <a href="{% url 'login' %}" class="btn btn-review text-white">Авторизуйтесь чтобы оставить отзыв</a>
+        </div>
+    {% endif %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if is_paginated %}
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo;&laquo;</a>
-                <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+    <div class="pagination">
+        <span class="step-links">
+            {% if is_paginated %}
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo;&laquo;</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                {% endif %}
+
+                <span class="current">
+                    {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;&raquo;</a>
+                {% endif %}
             {% endif %}
-
-            <span class="current">
-                {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;&raquo;</a>
-            {% endif %}
-        {% endif %}
-    </span>
+        </span>
+    </div>
 </div>
 {% endblock %}
 

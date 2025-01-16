@@ -4,6 +4,7 @@ from django.db.models import Avg
 from datetime import datetime, timedelta, time
 from Beauty_Dom.settings import BREAK_AFTER_WORK
 
+
 # Create your models here.
 class CustomUser(AbstractUser):
     verification_code = models.CharField(max_length=100, blank=True, null=True)
@@ -118,6 +119,8 @@ class SiteRating(models.Model):
 
 
 class Appointment(models.Model):
+    import utils
+
     class Meta: 
         verbose_name = 'Запись на прием'  # Измените на нужное название
         verbose_name_plural = 'Записи на прием'  # Измените на нужное множественное число
