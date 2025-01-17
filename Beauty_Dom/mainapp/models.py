@@ -119,14 +119,13 @@ class SiteRating(models.Model):
 
 
 class Appointment(models.Model):
-    import utils
+
 
     class Meta: 
         verbose_name = 'Запись на прием'  # Измените на нужное название
         verbose_name_plural = 'Записи на прием'  # Измените на нужное множественное число
         ordering = ['-status']
         
-
     CHOICES = [
         ('complete', 'ЗАВЕРШЕНО'),
         ('not_complete', 'НЕ ЗАВЕРШЕНО')
@@ -143,43 +142,11 @@ class Appointment(models.Model):
     end_time_after_break = models.TimeField()
     status = models.CharField(choices=CHOICES, default='not_complete', max_length=12)
     session_key = models.CharField(max_length=40, null=True, blank=True)  # Хранение ключа сессии для связи
-
     name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
     phone_number = models.CharField(max_length=11, blank=True)
 
 
-
-    def calculate_total_price(self, services):
-        return sum(service.price for service in services)   
-
-    def calculate_total_time(self, services):
-        total_time = timedelta()  # Инициализация начальным значением
-        for service in services:
-            total_time += service.time  # Сложение каждого duration
-        return total_time
-    
-    def add_time_and_timedelta(self, t: time, delta: timedelta, delta_break: timedelta) -> time:
-        datetime_obj1 = datetime.combine(datetime.min, t) + delta
-        datetime_obj2 = datetime_obj1 + delta_break
-        return datetime_obj1.time(), datetime_obj2.time()
-    
-    def save(self, *args, **kwargs):
-        # Проверяем, создается ли объект впервые
-        is_new = self.pk is None
-
-        # Сохраняем объект, чтобы он получил ID
-        super().save(*args, **kwargs)
-
-        # Выполняем расчеты только после получения ID
-        if self.services.exists() or is_new:
-            self.total_price = self.calculate_total_price(self.services.all())
-            self.total_time = self.calculate_total_time(self.services.all())
-            self.end_time, self.end_time_after_break = self.add_time_and_timedelta(
-                self.start_time, self.total_time, BREAK_AFTER_WORK
-            )
-            # Сохраняем изменения, указав только измененные поля
-            super().save(update_fields=['total_price', 'total_time', 'end_time', 'end_time_after_break'])
 
         
 class NotAvailaibleDates(models.Model):

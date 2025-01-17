@@ -42,7 +42,7 @@ header::after {
     flex-direction: column; /* Вертикальная ориентация */
     align-items: center; /* Центрирование по горизонтали */
     justify-content: center; /* Центрирование по вертикали */
-    text-align: center; /* Центрирование текста */
+
     /* Убедись, что у контейнера есть фиксированная высота или min-height */
     min-height: 80vh; /* Минимальная высота 80% от высоты окна */
     margin-top: 80px;
