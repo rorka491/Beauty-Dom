@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = ['https://7972-176-197-198-140.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [
+    'adminapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,7 +60,9 @@ ROOT_URLCONF = 'Beauty_Dom.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'Beauty_Dom' / 'adminapp' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -25,7 +25,6 @@ urlpatterns = [
     path('appointment_step4/', AppointmentViewStep4.as_view(), name='appointment_step4'),
     path('recover_password1/', RecoverPasswordStep1.as_view(), name='recover_password1'),
     path('recover_password2/<uuid:code>/', RecoverPasswordStep2.as_view(), name='recover_password2'),
-
 ]
 
 if settings.DEBUG:

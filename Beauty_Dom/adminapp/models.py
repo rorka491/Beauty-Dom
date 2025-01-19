@@ -1,3 +1,29 @@
 from django.db import models
+from mainapp.models import Appointment 
 
-# Create your models here.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

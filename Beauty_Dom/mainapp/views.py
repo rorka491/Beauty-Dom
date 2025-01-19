@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.views.generic import FormView, ListView, DetailView, TemplateView
 from .models import *
 from .forms import *
@@ -14,11 +13,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.views import LoginView
-from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK
+from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_DURATION
 from datetime import timedelta, date, datetime
 from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
-from Beauty_Dom.settings import WORKDAY_DURATION
+
 
 
 
