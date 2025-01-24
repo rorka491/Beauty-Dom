@@ -3,7 +3,7 @@ from mainapp.views import *
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from mainapp.views import AppointmentViewStep1, AppointmentViewStep2, AppointmentViewStep3, AppointmentViewStep4
+from adminapp.views import AppointmentViewStep1, AppointmentViewStep2, AppointmentViewStep3, AppointmentViewStep4
 
 
 urlpatterns = [

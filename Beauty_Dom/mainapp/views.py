@@ -138,7 +138,8 @@ class MyAppointments(LoginRequiredMixin, ListView):
 
     def get(self, request):
         current_user = self.request.user
-        my_appointments = Appointment.objects.filter(user=current_user, status='not_complete')
+        current_client = Client.objects.get(user=current_user)
+        my_appointments = self.model.objects.filter(client=current_client, status='not_complete')
         return render(request, self.template_name, {'my_appointments': my_appointments})
     
 
@@ -177,6 +178,7 @@ class VerifyUserView(View):
         user = get_object_or_404(CustomUser, verification_code=code)
         if not user.is_active:
             user.is_active = True
+            Client.objects.get_or_create(user=user)
             user.save()
         return redirect('login', permanent=True)  # Перенаправление на страницу входа
 
@@ -299,9 +301,10 @@ class AppointmentViewStep4(FormView):
         selected_date, selected_services_ids, selected_start_time = self.get_data(request)
 
         appointment = Appointment.objects.create(
-            user=self.request.user,
+            client=Client.objects.get(user=self.request.user),
             date=selected_date,
             start_time=datetime.strptime(selected_start_time, "%H:%M").time(),
+            end_time=,
             status='not_complete'
         )
         appointment.save

@@ -6,17 +6,17 @@ from django.contrib.auth.models import User
 from django import forms
 
 
-class ClientRecordForm(forms.ModelForm):
-    """"""
-    class Meta:
-        model = Appointment
-        fields = '__all__'
-        exclude = ['total_price', 'total_time', 'end_time', 'end_time_after_break', 'status', 'session_key']
+# class ClientRecordForm(forms.ModelForm):
+#     """"""
+#     class Meta:
+#         model = Appointment
+#         fields = '__all__'
+#         exclude = ['total_price', 'total_time', 'end_time', 'end_time_after_break', 'status', 'session_key']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Устанавливаем профиль по умолчанию для неавторизованных пользователей
-        self.fields['user'].initial = CustomUser.objects.get(username='Nadezhda')
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # Устанавливаем профиль по умолчанию для неавторизованных пользователей
+#         self.fields['user'].initial = CustomUser.objects.get(username='Nadezhda')
 
 
 
@@ -43,8 +43,8 @@ class UserAdmin(BaseUserAdmin):
     )
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('user__first_name', 'user__last_name', 'start_time', 'end_time', 'date', 'total_price','name', 'last_name', 'phone_number', 'status')
-    form = ClientRecordForm
+    list_display = ('client__name', 'client__last_name', 'start_time', 'end_time', 'date', 'total_price', 'status')
+    # form = ClientRecordForm
 
 
 class ReviewsAdmin(admin.ModelAdmin):
@@ -57,6 +57,7 @@ admin.site.register(SiteRating)
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(NotAvailaibleDates)
+admin.site.register(Client)
 
 
 

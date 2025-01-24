@@ -2,27 +2,33 @@ from django.shortcuts import render, redirect
 from django.views.generic import FormView
 from django.http import HttpResponse
 from mainapp.models import *
-from mainapp.forms import *
+from adminapp.forms import *
 from mainapp.utils import *
 from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_DURATION
-
-
-
-
 
 # представления для записи / несколько шагов
 
 class AppointmentViewStep1(FormView):
     template_name = 'adminapp/appointment1.html'
-    
+
     def get(self, request):
+        form = ClientInfoform()
+        return render(request, self.template_name, {'form': form})
 
 
     def post(self, request):
+        form = ClientInfoform(request.POST)
+        if form.is_valid():
+            self.request.session['name'] = str(form.cleaned_data['name'])
+            self.request.session['last_name'] = str(form.cleaned_data['last_name'])
+            self.request.session['phone_number'] = str(form.cleaned_data['phone_number'])
+            return redirect('form_step2')
+
+        return render(request, self.template_name, {'form': form})
 
 
 
-class AppointmentViewStep1(FormView):
+class AppointmentViewStep2(FormView):
     template_name = 'mainapp/appointment1.html'
 
     def return_to_page(self, request, error_message=None):
@@ -30,11 +36,13 @@ class AppointmentViewStep1(FormView):
 
         if error_message:
             return render(request, self.template_name, {'services': services, 'error_message': error_message})  
-          
+            
         return render(request, self.template_name, {'services': services})
+    
             
     def get(self, request):
         return self.return_to_page(request)
+    
 
     def post(self, request):
 
@@ -58,16 +66,25 @@ class AppointmentViewStep1(FormView):
         return redirect('appointment_step2')
 
 
-class AppointmentViewStep2(FormView):
+class AppointmentViewStep3(FormView):
     template_name = 'mainapp/appointment2.html'
+    form_class = DateForm
+
+    def return_to_page(self, request, error_message=None, form=None):
+        available_dates = self.request.session.get('available_dates')
+        form = form or self.form_class()
+        context = {'form': form, 'availeble_dates': available_dates}
+        
+        if error_message:
+            context['error_message'] = error_message
+
+        return render(request, self.template_name, context)
 
     def get(self, request):
-        available_dates = self.request.session.get('available_dates')
-        form = DateForm
-        return render(request, self.template_name, {'form': form, 'available_dates': available_dates})
+        self.return_to_page(request)
+
 
     def post(self, request):
-
         form = DateForm(request.POST)
         if form.is_valid():
             
@@ -79,14 +96,12 @@ class AppointmentViewStep2(FormView):
             self.request.session['available_start_time'] = available_start_time
 
             return redirect('appointment_step3')
-    
-        available_dates = self.request.session.get('available_dates')
-        form = DateForm
-        return render(request, self.template_name, {'form': form, 'availeble_dates': available_dates})
+
+        self.return_to_page(request)
 
 
    
-class AppointmentViewStep3(FormView):
+class AppointmentViewStep4(FormView):
     template_name = 'mainapp/appointment3.html'
     form_class = StartTimeForm
     
@@ -95,8 +110,8 @@ class AppointmentViewStep3(FormView):
         choices = [(i, i) for i in available_start_time]
         return choices
 
-    def return_to_page(self, request, form=None):
-        form = self.form_class(self.request.POST or None, choices=self.get_choices())
+    def return_to_page(self, request):
+        form = self.form_class(request.POST or None, choices=self.get_choices())
         title = 'Заптсь на прием'
         return render(request, self.template_name, {'form': form, 'title': title})
     
@@ -112,10 +127,10 @@ class AppointmentViewStep3(FormView):
             self.request.session['selected_start_time'] = str(form.cleaned_data['start_time']) 
             return redirect('appointment_step4')
 
-        return self.return_to_page(request, form)
+        return self.return_to_page(request)
 
     
-class AppointmentViewStep4(FormView):
+class AppointmentViewStep5(FormView):
     template_name = 'mainapp/appointment4.html'
 
     def get_data(self, request):
