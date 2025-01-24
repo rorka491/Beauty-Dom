@@ -9,6 +9,7 @@ class ClientInfoform(forms.Form):
     phone_number = forms.CharField(label='', max_length=11, min_length=11, widget=forms.TextInput(attrs={'placeholder': 'Телефон'}))
 
 
+
 class DateForm(forms.Form):
     date = forms.DateField(label='',
         widget=forms.DateInput(
@@ -35,3 +36,9 @@ class StartTimeForm(forms.Form):
     def __init__(self, *args, choices, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['start_time'].choices = choices
+
+class NotesForm(forms.Form):
+    notes = forms.CharField(label='', max_length=1000, widget=forms.TextInput(attrs={'placeholder': 'Запись '}))
+
+
+

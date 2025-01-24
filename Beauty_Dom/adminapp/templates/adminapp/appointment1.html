@@ -1,6 +1,8 @@
 {% extends 'adminapp/appointment_base.html' %}
 
+{% block url %}{% url 'form_step1' %}{% endblock url %}
 
 {% block form %}
+{% csrf_token %}
 {{ form }}
 {% endblock form %}

@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.views import LoginView
-from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_DURATION
+from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_DURATION, is_verify
 from datetime import timedelta, date, datetime
 from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -37,27 +37,29 @@ class CustomerSignUpView(FormView):
         return context 
     
     def form_valid(self, form):
-        user = form.save(commit=False)
-        user.is_active = False  # деактивируем пользователя до подтверждения
+        if is_verify:
+            user = form.save(commit=False)
+            user.is_active = False  # деактивируем пользователя до подтверждения
 
-        # Сохраняем email в сессию
-        self.email = form.cleaned_data['email']
-        self.request.session['email'] =  self.email 
+            # Сохраняем email в сессию
+            self.email = form.cleaned_data['email']
+            self.request.session['email'] =  self.email 
 
-        # Генерация уникального кода подтверждения
-        user.verification_code = str(uuid.uuid4())  # Генерируем код
-        user.save()
+            # Генерация уникального кода подтверждения
+            user.verification_code = str(uuid.uuid4())  # Генерируем код
+            user.save()
 
-        # Отправка письма с кодом подтверждения
-        verification_link = self.request.build_absolute_uri(
-            reverse_lazy('verify', args=[user.verification_code])
-        )
+            # Отправка письма с кодом подтверждения
+            verification_link = self.request.build_absolute_uri(
+                reverse_lazy('verify', args=[user.verification_code])
+            )
 
-        send_activation_code(self.email, verification_link)
+            send_activation_code(self.email, verification_link)
+            return super().form_valid(form)
+        else:
+            user = form.save()
+            return super().form_valid(form)
 
-
-        return super().form_valid(form)
-    
 # представление для входа
 class CustomerLoginView(LoginView):
     template_name = 'mainapp/login.html'
@@ -279,6 +281,18 @@ class AppointmentViewStep3(FormView):
 class AppointmentViewStep4(FormView):
     template_name = 'mainapp/appointment4.html'
 
+
+    def all_need_params_in_session(self, request):
+        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
+        return {
+            'selected_start_time': selected_start_time,
+            'selected_services': get_service_names(selected_services_ids),
+            'selected_date': selected_date,
+            'total_time': calculate_total_time(selected_services_ids), 
+            'total_price': calculate_total_price(selected_services_ids),
+            'end_time': calculate_end_time(selected_start_time, calculate_total_time(selected_services_ids))
+        }
+
     def get_data(self, request):
         return (self.request.session.get('selected_date'), 
             self.request.session.get('selected_services_ids'),
@@ -286,29 +300,25 @@ class AppointmentViewStep4(FormView):
         )
     
     def get(self, request):
-        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
-
-        return render(request, self.template_name, {
-            'selected_start_time': selected_start_time,
-            'selected_services': get_service_names(selected_services_ids),
-            'selected_date': selected_date,
-            'total_time': calculate_total_time(selected_services_ids), 
-            'total_price': calculate_total_price(selected_services_ids),
-            'end_time': calculate_end_time(selected_start_time, calculate_total_time(selected_services_ids))
-        })
+        params = self.all_need_params_in_session(request)
+        return render(request, self.template_name, params)
     
     def post(self, request):
-        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
-
+        params = self.all_need_params_in_session(request)
         appointment = Appointment.objects.create(
             client=Client.objects.get(user=self.request.user),
-            date=selected_date,
-            start_time=datetime.strptime(selected_start_time, "%H:%M").time(),
-            end_time=,
+            date=params['selected_date'],
+            start_time=params['selected_start_time'],
+            end_time=params['end_time'],
+            total_price = params['total_price'],
             status='not_complete'
         )
+        for name in params['selected_services']:
+            service = Service.objects.get(name=name)  # Или get_or_create
+            appointment.services.add(service)
+
         appointment.save
-        return HttpResponse('готово')
+        return HttpResponse('<h1>готово</h1>')
 
     
 # страница для завершения регистрации

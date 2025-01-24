@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 from datetime import timedelta, datetime, date, time
-from Beauty_Dom.settings import START_WORK, END_WORK, WORKDAY_DURATION, today
+from Beauty_Dom.settings import START_WORK, END_WORK, WORKDAY_DURATION, today, BREAK_AFTER_WORK
 from .models import Service
 
 

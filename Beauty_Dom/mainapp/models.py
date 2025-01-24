@@ -30,16 +30,21 @@ class CustomUser(AbstractUser):
 class Client(models.Model):
     user = models.OneToOneField(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 
-    phone_number = models.CharField(max_length=11)
+    phone_number = models.CharField(max_length=11, default='отсутствует', blank=True)
     name = models.CharField(max_length=255,)
     last_name = models.CharField(max_length=255,)
 
     # Дополнительные поля для всех клиентов
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
+    class Meta:
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'клиенты'
+
+
     def __str__(self):
-        return f'{self.user.username}'
+        return f'Фамилия {self.user.username}'
     
 class Service(models.Model):
     CHOICES_TYPE = [

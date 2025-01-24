@@ -8,13 +8,12 @@ from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_
 
 # представления для записи / несколько шагов
 
-class AppointmentViewStep1(FormView):
+class AdminAppointmentViewStep1(FormView):
     template_name = 'adminapp/appointment1.html'
 
     def get(self, request):
         form = ClientInfoform()
         return render(request, self.template_name, {'form': form})
-
 
     def post(self, request):
         form = ClientInfoform(request.POST)
@@ -28,8 +27,8 @@ class AppointmentViewStep1(FormView):
 
 
 
-class AppointmentViewStep2(FormView):
-    template_name = 'mainapp/appointment1.html'
+class AdminAppointmentViewStep2(FormView):
+    template_name = 'adminapp/appointment1.html'
 
     def return_to_page(self, request, error_message=None):
         services = Service.objects.all()
@@ -63,11 +62,11 @@ class AppointmentViewStep2(FormView):
         self.request.session['available_dates'] = [date.isoformat() for date in available_dates]
 
 
-        return redirect('appointment_step2')
+        return redirect('form_step3')
 
 
-class AppointmentViewStep3(FormView):
-    template_name = 'mainapp/appointment2.html'
+class AdminAppointmentViewStep3(FormView):
+    template_name = 'adminapp/appointment2.html'
     form_class = DateForm
 
     def return_to_page(self, request, error_message=None, form=None):
@@ -101,8 +100,8 @@ class AppointmentViewStep3(FormView):
 
 
    
-class AppointmentViewStep4(FormView):
-    template_name = 'mainapp/appointment3.html'
+class AdminAppointmentViewStep4(FormView):
+    template_name = 'adminapp/appointment3.html'
     form_class = StartTimeForm
     
     def get_choices(self):
@@ -130,8 +129,8 @@ class AppointmentViewStep4(FormView):
         return self.return_to_page(request)
 
     
-class AppointmentViewStep5(FormView):
-    template_name = 'mainapp/appointment4.html'
+class AdminAppointmentViewStep5(FormView):
+    template_name = 'adminapp/appointment4.html'
 
     def get_data(self, request):
         return (self.request.session.get('selected_date'), 
@@ -162,12 +161,3 @@ class AppointmentViewStep5(FormView):
         )
         appointment.save
         return HttpResponse('готово')
-
-
-
-
-
-
-
-
-

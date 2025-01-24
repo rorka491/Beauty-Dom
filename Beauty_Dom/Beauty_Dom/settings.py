@@ -175,6 +175,7 @@ WORKDAY_DURATION = end_time - start_time
 
 BREAK_AFTER_WORK = timedelta(minutes=15)
 
+is_verify = True
 
 
 

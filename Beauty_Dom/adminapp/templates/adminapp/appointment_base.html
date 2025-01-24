@@ -14,7 +14,7 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <form method="post" action="{% url 'appointment_step1' %}">
+    <form method="post" action="{% block url %}{% endblock url %}">
         <div class="form-header">
             <h1 class="form-title">Запись на прием</h1>
             <div class="steps">
@@ -25,7 +25,6 @@
             </div>
         </div>
         <div class="form-inside">
-            {% csrf_token %}
             {% block form %}
             {% endblock form  %}
         </div>
