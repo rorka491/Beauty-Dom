@@ -14,11 +14,7 @@
 {% if user.is_authenticated and not user.is_superuser %}
 
 {% if error_message %}
-<ul>
-    {% for error in error_message %}
-        <li>{{ error }}</li>
-    {% endfor %}
-</ul>
+{{ error_message }}
 {% endif %}
 
 <form method="post" action="{% url 'appointment_step1' %}">

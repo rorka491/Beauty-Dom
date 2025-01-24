@@ -44,7 +44,7 @@ class Client(models.Model):
 
 
     def __str__(self):
-        return f'Фамилия {self.user.username}'
+        return self.user.username
     
 class Service(models.Model):
     CHOICES_TYPE = [

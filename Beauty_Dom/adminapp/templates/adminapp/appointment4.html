@@ -2,6 +2,15 @@
 
 {% block url %}{% url 'form_step4' %}{% endblock url %}
 
+{% block steps %}
+<div class="steps">
+    <div class="step active"></div>
+    <div class="step active"></div>
+    <div class="step active"></div>
+    <div class="step active"></div>
+</div>
+{% endblock steps %}
+
 {% block form %}
 {% csrf_token %}
 {{ form }}

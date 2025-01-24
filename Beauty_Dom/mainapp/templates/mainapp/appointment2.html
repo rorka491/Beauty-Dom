@@ -56,7 +56,7 @@
     const availableDates = JSON.parse("{{ available_dates|safe }}".replace(/'/g, '"'));
     const minDate = "{{ available_dates|first }}";
     const maxDate = "{{ available_dates|last }}"
-
+    
     flatpickr("#datepicker", {
         enable: availableDates, // Доступные даты
         minDate: minDate, 

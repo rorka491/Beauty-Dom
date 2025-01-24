@@ -202,13 +202,13 @@ class AppointmentViewStep1(FormView):
     def post(self, request):
 
         selected_services_ids = self.request.POST.getlist('services')
-
+        print(selected_services_ids)
         if not selected_services_ids:
-            self.return_to_page(request, 'Пожалуйста, выберите хотя бы одну услугу.')
+            return self.return_to_page(request, 'Пожалуйста, выберите хотя бы одну услугу.')
 
         total_time = calculate_total_time(selected_services_ids)
         if total_time >= WORKDAY_DURATION:
-            self.return_to_page(request, 'Длительность выбранных услуг превышает рабочий день.')
+            return self.return_to_page(request, 'Длительность выбранных услуг превышает рабочий день.')
 
         # Доступные даты
         available_dates = get_available_dates(selected_services_ids)
