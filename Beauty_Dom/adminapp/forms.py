@@ -5,7 +5,7 @@ from django import forms
 
 class ClientInfoform(forms.Form):
     name = forms.CharField(label='', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Имя'}))
-    last_nname = forms.CharField(label='', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Фамилия'}))
+    last_name = forms.CharField(label='', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Фамилия'}))
     phone_number = forms.CharField(label='', max_length=11, min_length=11, widget=forms.TextInput(attrs={'placeholder': 'Телефон'}))
 
 

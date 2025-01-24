@@ -4,5 +4,24 @@
 
 {% block form %}
 {% csrf_token %}
-{{ form }}
+<div class="form-inside">
+    {% csrf_token %}
+    <div class="table-container"> 
+    <table>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="services" value="{{ service.id }}">
+                </td>
+                <td>{{ service.name }}</td>
+                <td>{{ service.time }}</td>
+                <td>{{ service.price }}</td>
+                <td>&#x20BD;</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
 {% endblock form %}

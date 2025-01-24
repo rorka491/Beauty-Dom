@@ -28,7 +28,7 @@ class AdminAppointmentViewStep1(FormView):
 
 
 class AdminAppointmentViewStep2(FormView):
-    template_name = 'adminapp/appointment1.html'
+    template_name = 'adminapp/appointment2.html'
 
     def return_to_page(self, request, error_message=None):
         services = Service.objects.all()
@@ -65,25 +65,50 @@ class AdminAppointmentViewStep2(FormView):
         return redirect('form_step3')
 
 
-class AdminAppointmentViewStep3(FormView):
-    template_name = 'adminapp/appointment2.html'
-    form_class = DateForm
+# class AdminAppointmentViewStep3(FormView):
+#     template_name = 'adminapp/appointment3.html'
+#     form_class = DateForm
 
-    def return_to_page(self, request, error_message=None, form=None):
-        available_dates = self.request.session.get('available_dates')
-        form = form or self.form_class()
-        context = {'form': form, 'availeble_dates': available_dates}
+#     def return_to_page(self, request, error_message=None, form=None):
+#         available_dates = self.request.session.get('available_dates')
+#         form = form or self.form_class()
+#         context = {'form': form, 'availeble_dates': available_dates}
         
-        if error_message:
-            context['error_message'] = error_message
+#         if error_message:
+#             context['error_message'] = error_message
 
-        return render(request, self.template_name, context)
+#         return render(request, self.template_name, context)
+
+#     def get(self, request):
+#         self.return_to_page(request)
+
+
+#     def post(self, request):
+#         form = DateForm(request.POST)
+#         if form.is_valid():
+            
+#             total_time = calculate_total_time(self.request.session.get('selected_services_ids'))
+#             selected_date = str(form.cleaned_data['date'])
+#             available_start_time = get_available_start_time(selected_date, total_time)
+
+#             self.request.session['selected_date'] = selected_date
+#             self.request.session['available_start_time'] = available_start_time
+
+#             return redirect('form_step4')
+#         error_message = 'гавно залупа'
+#         self.return_to_page(request, error_message=error_message)
+
+class AdminAppointmentViewStep3(FormView):
+    template_name = 'adminapp/appointment3.html'
 
     def get(self, request):
-        self.return_to_page(request)
-
+        available_dates = self.request.session.get('available_dates')
+        form = DateForm
+        print(available_dates)
+        return render(request, self.template_name, {'form': form, 'available_dates': available_dates})
 
     def post(self, request):
+
         form = DateForm(request.POST)
         if form.is_valid():
             
@@ -95,13 +120,16 @@ class AdminAppointmentViewStep3(FormView):
             self.request.session['available_start_time'] = available_start_time
 
             return redirect('appointment_step3')
+    
+        available_dates = self.request.session.get('available_dates')
+        form = DateForm
+        return render(request, self.template_name, {'form': form, 'availeble_dates': available_dates})
 
-        self.return_to_page(request)
 
 
    
 class AdminAppointmentViewStep4(FormView):
-    template_name = 'adminapp/appointment3.html'
+    template_name = 'adminapp/appointment4.html'
     form_class = StartTimeForm
     
     def get_choices(self):
@@ -130,7 +158,7 @@ class AdminAppointmentViewStep4(FormView):
 
     
 class AdminAppointmentViewStep5(FormView):
-    template_name = 'adminapp/appointment4.html'
+    template_name = 'adminapp/appointment5.html'
 
     def get_data(self, request):
         return (self.request.session.get('selected_date'), 
