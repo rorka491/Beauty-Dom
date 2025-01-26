@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.views import LoginView
@@ -73,8 +73,14 @@ class CustomerLoginView(LoginView):
         context['title'] = 'Вход'
         return context
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Пожалуйста, введите правильные имя пользователя и пароль.")
+    def form_invalid(self, form, *args, **kwargs):
+        if 'username' in form.errors:
+            messages.error(self.request, "Пользователь с таким именем не найден.")
+        elif 'password' in form.errors:
+            messages.error(self.request, "Неправильный пароль.")
+        else:
+            messages.error(self.request, "Пожалуйста, введите правильные имя пользователя и пароль.")
+
         return super().form_invalid(form)
 
 
@@ -82,11 +88,31 @@ class CustomerLoginView(LoginView):
 class Index(TemplateView):
     template_name = 'mainapp/index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        return context
-    
+    def get(self, request,):
+        my_text = 'Загружаемые файлы'
+        title = 'Главная страница'
+        form = VideoForm()
+        file_obj = VideoFile.obj_video.all()
+        context = {'my_text': my_text, 'form': form, 'title': title, 'file_obj': file_obj}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        my_text = 'Загружаемые файлы'
+        title = 'Главная страница'
+        form = VideoForm()
+        file_obj = VideoFile.obj_video.all()
+        context = {'my_text': my_text, 'form': form, 'title': title, 'file_obj': file_obj}
+        return render(request, self.template_name, context)
+
+
+def delete_video(request, id):
+    video = VideoFile.obj_video.get(id=id)
+    video.delete()
+    return redirect('index')
+
 # стпаница о нас
 class About(ListView):
     template_name = 'mainapp/about.html'
@@ -318,7 +344,7 @@ class AppointmentViewStep4(FormView):
             appointment.services.add(service)
 
         appointment.save
-        return HttpResponse('<h1>готово</h1>')
+        return redirect('my_appointments')
 
     
 # страница для завершения регистрации
@@ -400,7 +426,6 @@ class RecoverPasswordStep2(FormView):
         else:
             messages.error(self.request, 'Пароли не совпадают')
             return super().form_invalid(form)
-
 
 
 

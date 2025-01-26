@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'mainapp',
     'formtools',
     'background_task',
+    'django_cleanup'
 ]
 
 MIDDLEWARE = [
@@ -132,7 +133,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'mainapp/static'),  # Убедитесь, что путь правильный
+    os.path.join(BASE_DIR, 'mainapp/static'),  # Статика приложения mainapp
+    os.path.join(BASE_DIR, 'static'),         # Общая статика
+    os.path.join(BASE_DIR, 'adminapp/static') # Статика приложения adminapp
 ]
 
 # Default primary key field type
@@ -148,8 +151,8 @@ LANGUAGE_CODE = 'ru'
 
 SMSRU_API_KEY = '7FDFD7A6-FA50-D496-B2C3-CE8C7C998832'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # Папка для загружаемых файлов
 MEDIA_URL = '/media/'  # URL для доступа к загруженным файлам
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # Папка для загружаемых файлов
 
 LOGOUT_REDIRECT_URL = '/'  # Перенаправление на главную страницу
 
@@ -175,7 +178,7 @@ WORKDAY_DURATION = end_time - start_time
 
 BREAK_AFTER_WORK = timedelta(minutes=15)
 
-is_verify = True
+is_verify =  False
 
 
 

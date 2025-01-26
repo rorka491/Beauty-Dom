@@ -18,9 +18,20 @@ class AdminAppointmentViewStep1(FormView):
     def post(self, request):
         form = ClientInfoform(request.POST)
         if form.is_valid():
-            self.request.session['name'] = str(form.cleaned_data['name'])
-            self.request.session['last_name'] = str(form.cleaned_data['last_name'])
-            self.request.session['phone_number'] = str(form.cleaned_data['phone_number'])
+            phone_number = str(form.cleaned_data['phone_number'])
+            name = str(form.cleaned_data['name'])
+            last_name = str(form.cleaned_data['last_name'])
+
+            self.request.session['phone_number'] = phone_number
+
+            client, created = Client.objects.get_or_create(
+            phone_number=phone_number,
+            defaults={
+                'name': name,
+                'last_name': last_name,
+            })       
+
+            
             return redirect('form_step2')
 
         return render(request, self.template_name, {'form': form})
@@ -66,38 +77,6 @@ class AdminAppointmentViewStep2(FormView):
         return redirect('form_step3')
 
 
-# class AdminAppointmentViewStep3(FormView):
-#     template_name = 'adminapp/appointment3.html'
-#     form_class = DateForm
-
-#     def return_to_page(self, request, error_message=None, form=None):
-#         available_dates = self.request.session.get('available_dates')
-#         form = form or self.form_class()
-#         context = {'form': form, 'availeble_dates': available_dates}
-        
-#         if error_message:
-#             context['error_message'] = error_message
-
-#         return render(request, self.template_name, context)
-
-#     def get(self, request):
-#         self.return_to_page(request)
-
-
-#     def post(self, request):
-#         form = DateForm(request.POST)
-#         if form.is_valid():
-            
-#             total_time = calculate_total_time(self.request.session.get('selected_services_ids'))
-#             selected_date = str(form.cleaned_data['date'])
-#             available_start_time = get_available_start_time(selected_date, total_time)
-
-#             self.request.session['selected_date'] = selected_date
-#             self.request.session['available_start_time'] = available_start_time
-
-#             return redirect('form_step4')
-#         error_message = 'гавно залупа'
-#         self.return_to_page(request, error_message=error_message)
 
 class AdminAppointmentViewStep3(FormView):
     template_name = 'adminapp/appointment3.html'
@@ -120,7 +99,7 @@ class AdminAppointmentViewStep3(FormView):
             self.request.session['selected_date'] = selected_date
             self.request.session['available_start_time'] = available_start_time
 
-            return redirect('appointment_step3')
+            return redirect('form_step4')
     
         available_dates = self.request.session.get('available_dates')
         form = DateForm
@@ -153,13 +132,24 @@ class AdminAppointmentViewStep4(FormView):
 
         if form.is_valid():
             self.request.session['selected_start_time'] = str(form.cleaned_data['start_time']) 
-            return redirect('appointment_step4')
+            return redirect('form_step5')
 
         return self.return_to_page(request)
 
     
 class AdminAppointmentViewStep5(FormView):
     template_name = 'adminapp/appointment5.html'
+
+    def all_need_params_in_session(self, request):
+        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
+        return {
+            'selected_start_time': selected_start_time,
+            'selected_services': get_service_names(selected_services_ids),
+            'selected_date': selected_date,
+            'total_time': calculate_total_time(selected_services_ids), 
+            'total_price': calculate_total_price(selected_services_ids),
+            'end_time': calculate_end_time(selected_start_time, calculate_total_time(selected_services_ids))
+        }
 
     def get_data(self, request):
         return (self.request.session.get('selected_date'), 
@@ -168,25 +158,27 @@ class AdminAppointmentViewStep5(FormView):
         )
     
     def get(self, request):
-        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
-
-        return render(request, self.template_name, {
-            'selected_start_time': selected_start_time,
-            'selected_services': get_service_names(selected_services_ids),
-            'selected_date': selected_date,
-            'total_time': calculate_total_time(selected_services_ids), 
-            'total_price': calculate_total_price(selected_services_ids),
-            'end_time': calculate_end_time(selected_start_time, calculate_total_time(selected_services_ids))
-        })
+        params = self.all_need_params_in_session(request)
+        return render(request, self.template_name, params)
     
     def post(self, request):
-        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
-
+        params = self.all_need_params_in_session(request)
+        phone_number = request.session.get('phone_number')
+        client = Client.objects.get(phone_number=phone_number)
         appointment = Appointment.objects.create(
-            user=self.request.user,
-            date=selected_date,
-            start_time=datetime.strptime(selected_start_time, "%H:%M").time(),
+            client=client,
+            date=params['selected_date'],
+            start_time=params['selected_start_time'],
+            end_time=params['end_time'],
+            total_price = params['total_price'],
             status='not_complete'
         )
+        for name in params['selected_services']:
+            service = Service.objects.get(name=name)  # Или get_or_create
+            appointment.services.add(service)
+
         appointment.save
-        return HttpResponse('готово')
+        return HttpResponse('<h1>Готово</h1>')
+    
+
+

@@ -6,25 +6,30 @@
 {% endblock %}
 
 {% block content %}
-<!-- <div class="container">
-    <div class="head">
-        <ul>
-            <li><img src="{% static 'mainapp/images/загрузка (2).jpeg' %}" alt=""></li>
-            <li><img src="{% static 'mainapp/images/загрузка.jpeg' %}" alt=""></li>
-            <li><img src="{% static 'mainapp/images/загрузка (3).jpeg' %}" alt=""></li>
-            <li><img src="{% static 'mainapp/images/загрузка (1).jpeg' %}" alt="пупа"></li>
-        </ul>
-    </div>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Готово</button>
+</form>
 
-    <div class="manicur">
-
-    </div>
-
-    <div class="pedicur">
-
-    </div>
-</div> -->
-
+{% if file_obj.exists %}
+    <table class="table table-striped table-bordered">
+        <tbody>
+            {% for obj in file_obj %}
+                <tr>
+                    <td>{{ obj.id }}</td>
+                    <td>{{ obj.title }}</td>
+                    <td>{{ obj.file }}</td>
+                    <td><a href="{% url 'delete_video' id=obj.id %}">Удалить</a></td>
+                    <td>
+                        <video height="240" width="320" controls>
+                            <source src="{{ obj.file.url }}" type="video/mp4">
+                        </video>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
 {% endblock %}
-
 

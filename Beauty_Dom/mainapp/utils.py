@@ -146,7 +146,8 @@ def generate_time_slots(start_time, end_time, total_time=None):
     start = datetime.combine(datetime.today(), start_time)
     if total_time:
         end = datetime.combine(datetime.today(), end_time) - total_time
-    end = datetime.combine(datetime.today(), end_time)
+    else:
+        end = datetime.combine(datetime.today(), end_time)
     
     time_slots = []
     
@@ -161,6 +162,7 @@ def generate_time_slots(start_time, end_time, total_time=None):
 def get_available_start_time(selected_date, total_time):
     from .models import Appointment
     time_list = generate_time_slots(START_WORK, END_WORK, total_time) 
+    print(time_list)
 
     all_appointment_in_selected_date = Appointment.objects.filter(date=selected_date)
     print(all_appointment_in_selected_date)

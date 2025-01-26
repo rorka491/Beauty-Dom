@@ -29,13 +29,15 @@ class UserAdmin(BaseUserAdmin):
     )
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('client__name', 'client__last_name', 'start_time', 'end_time', 'date', 'total_price', 'status')
+    list_display = ('client__name', 'client__last_name', 'start_time', 'end_time', 'date', 'total_price', 'status', 'display_services')
 
 class ClientAdmin(admin.ModelAdmin):
     list_display = ['name', 'last_name', 'phone_number', 'user__username']
 
 class ReviewsAdmin(admin.ModelAdmin):
     list_display = ['user', 'is_approved']
+
+
 
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ProfileEmployer)
@@ -45,6 +47,8 @@ admin.site.register(CustomUser, UserAdmin)
 admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(NotAvailaibleDates)
 admin.site.register(Client, ClientAdmin)
+admin.site.register(VideoFile)
+
 
 
 

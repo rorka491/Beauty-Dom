@@ -30,7 +30,7 @@ class CustomUser(AbstractUser):
 class Client(models.Model):
     user = models.OneToOneField(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 
-    phone_number = models.CharField(max_length=11, default='отсутствует', blank=True)
+    phone_number = models.CharField(max_length=11, blank=True, null=True)
     name = models.CharField(max_length=255,)
     last_name = models.CharField(max_length=255,)
 
@@ -44,7 +44,7 @@ class Client(models.Model):
 
 
     def __str__(self):
-        return self.user.username
+        return self.user.username if self.user else self.name
     
 class Service(models.Model):
     CHOICES_TYPE = [
@@ -129,7 +129,7 @@ class SiteRating(models.Model):
     
     def update_rating(self):
         # Обновляем рейтинг и количество отзывов
-        total_rating = Review.objects.aggregate(average_rating=Avg('rating'))
+        total_rating = Review.objects.filter(is_approved=True).aggregate(average_rating=Avg('rating'))
         total_reviews = Review.objects.count()
         
         self.total_rating = total_rating['average_rating'] or 0
@@ -163,6 +163,11 @@ class Appointment(models.Model):
     status = models.CharField(choices=CHOICES, default='not_complete', max_length=12)
     session_key = models.CharField(max_length=40, null=True, blank=True)  # Хранение ключа сессии для связи
 
+    def display_services(self):
+        return ', '.join([service.name for service in self.services.all()]) 
+    
+    display_services.short_description = 'Услуги'
+
 
 
         
@@ -177,11 +182,26 @@ class NotAvailaibleDates(models.Model):
         return f'{self.date}'
 
 
+class VideoFile(models.Model):
+    title = models.CharField(
+        max_length=100, 
+        verbose_name='Описание файла',
+        )
 
+    file = models.FileField(
+        upload_to='videos',
+        verbose_name='Файл с видео',
+        null=True, blank=True
+        )
+    
+    class Meta:
+        verbose_name = 'Видео'
+        verbose_name_plural = 'Видео'
 
+    obj_video = models.Manager()
 
-
-
+    def __str__(self):
+        return self.title
 
 
 

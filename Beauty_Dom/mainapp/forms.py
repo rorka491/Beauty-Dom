@@ -143,6 +143,15 @@ class RecoverPasswordFormStep2(forms.Form):
             cleaned_data['password2'] = password2.strip()
 
 
+class VideoForm(forms.ModelForm):
+
+    class Meta:
+        model = VideoFile
+        fields = '__all__'
+
+
+
+
 
 
 

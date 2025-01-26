@@ -1,0 +1,23 @@
+{% extends 'adminapp/appointment_base.html' %}
+
+{% block url %}{% url 'form_step5' %}{% endblock url %}
+
+{% block steps %}
+<div class="steps">
+    <div class="step active"></div>
+    <div class="step active"></div>
+    <div class="step active"></div>
+    <div class="step active"></div>
+    <div class="step active"></div>
+</div>
+{% endblock steps %}
+
+{% block form %}
+{% csrf_token %}
+{{ selected_start_time }}
+{{ end_time }}
+{{ selected_date }}
+{{ selected_services }}
+{{ total_time }}
+{{ total_price }}
+{% endblock form %}

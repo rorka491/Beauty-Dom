@@ -10,6 +10,7 @@ urlpatterns = [
     path('form_step2/', AdminAppointmentViewStep2.as_view(), name='form_step2'),
     path('form_step3/', AdminAppointmentViewStep3.as_view(), name='form_step3'),
     path('form_step4/', AdminAppointmentViewStep4.as_view(), name='form_step4'),
+    path('form_step5/', AdminAppointmentViewStep5.as_view(), name='form_step5')
 ]
 
 

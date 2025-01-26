@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
+    path('delete_video/<int:id>/', delete_video, name='delete_video'),
     path('about/', About.as_view(), name='about'),
     path('reviews/', Reviews.as_view(), name='reviews'),
     path('success/<str:source>/', Success.as_view(), name='success'),
