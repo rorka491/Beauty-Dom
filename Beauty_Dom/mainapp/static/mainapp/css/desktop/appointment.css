@@ -25,17 +25,6 @@ form {
     overflow: hidden; /* Убираем лишние отступы */
 }
 
-/* .form-inside {
-    width: 100%;
-    height: auto; 
-    background: #fff;
-    border-radius: 5px;
-    color: #000000;
-    text-align: left;
-    margin-bottom: 0;
-    padding-bottom: 0;
-} */
-
 
 
 .form-control, .form-group label, .btn-primary {
@@ -57,19 +46,9 @@ form {
     border-color: #ff69b4;
 }
 
-/* Стиль для кнопки */
 
 
 
-
-.btn-right {
-    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
-    color: #fff;
-}
-
-.btn-left {
-    border: 2px solid #00000017; /* Обводка */
-}
 
 
 textarea {
