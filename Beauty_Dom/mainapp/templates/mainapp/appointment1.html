@@ -1,6 +1,8 @@
 {% extends 'mainapp/appointment_base.html' %}
 {% load static %}
 
+{% block url %}{% url 'appointment_step1' %}{% endblock url %}
+
 {% block steps %}
 <div class="step active"></div>
 <div class="step"></div>

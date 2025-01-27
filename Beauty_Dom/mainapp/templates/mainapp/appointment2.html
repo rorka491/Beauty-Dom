@@ -1,6 +1,8 @@
 {% extends 'mainapp/appointment_base.html' %}
 {% load static %}
 
+{% block url %}{% url 'appointment_step2' %}{% endblock url %}
+
 
 {%  block extrastyles %} 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -18,8 +20,9 @@
 {% block form %}
 {% csrf_token %}
 {{ form }}
+{% endblock %}
 
-
+{% block scripts %}
 <!-- Подключите сам flatpickr -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -57,6 +60,6 @@
 <script>
     document.getElementById("datepicker").placeholder = "Выберите дату              📅";
 </script>
-{% endblock %}
+{% endblock scripts %}
 
 

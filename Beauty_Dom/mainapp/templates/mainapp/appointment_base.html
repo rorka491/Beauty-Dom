@@ -19,7 +19,7 @@
 {{ error_message }}
 {% endif %}
 
-<form method="post" action="{% url 'appointment_step1' %}">
+<form method="post" action="{% block url %}{% endblock url %}">
     <div class="form-header">
         <h1 class="form-title">Запись на прием</h1>
         <div class="steps">
@@ -48,6 +48,9 @@
 {% else %}
     <p class="centered-text">Авторизуйтесь чтобы записаться на прием &#x2764;&#xFE0F;</p>
 {% endif %}
+
+{% block scripts %}
+{% endblock scripts %}
 
 {% endblock %}
 
