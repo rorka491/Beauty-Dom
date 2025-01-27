@@ -8,7 +8,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для блока */
     overflow: hidden; /* Скрытие переполняющего контента */
     text-align: center; /* Выравнивание текста по центру */
-    margin: 30px auto; /* Отступы вокруг карточки и центрирование */
     position: relative;
 }
 

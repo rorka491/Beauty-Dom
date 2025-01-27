@@ -5,10 +5,11 @@
     <title>Запись на прием</title>
 {% endblock %}
 
-{%  block extrastyles %} 
+{% block extrastyles %} 
 <link rel="stylesheet" href="{% static 'mainapp/css/desktop/appointment.css' %}"/>
+{% block styles %} 
 {% endblock %}
-
+{% endblock %}
 
 
 
@@ -33,12 +34,12 @@
     {% endblock %}
 
     <div class="container">
-        <div class="row d-flex justify-content-end ">
-            <div class="col-2">
+        <div class="row d-flex justify-content-between">
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
                 <a href="{% url 'index' %}" style='text-decoration: none;' class="btn btn-left btn-main">Назад</a>
 
             </div>
-            <div class="col-2">
+            <div class="col-12 col-md-2 mb-md-0">
                 <button type="submit" class="btn btn-right btn-main text-white">Далее</button>
             </div>
         </div>

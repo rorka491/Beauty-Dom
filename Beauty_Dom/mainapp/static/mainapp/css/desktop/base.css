@@ -44,7 +44,7 @@ header::after {
     justify-content: center; /* Центрирование по вертикали */
 
     /* Убедись, что у контейнера есть фиксированная высота или min-height */
-    margin-top: 160px;
+    margin-top: 80px;
 }
 
 header::after {
