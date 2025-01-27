@@ -1,68 +1,33 @@
-{% extends 'mainapp/base.html' %}
+{% extends 'mainapp/appointment_base.html' %}
 {% load static %}
 
-{% block title %}
-    <title>Запись на прием</title>
+{% block steps %}
+<div class="step active"></div>
+<div class="step"></div>
+<div class="step"></div>
+<div class="step"></div>
 {% endblock %}
 
-{%  block extrastyles %} 
-<link rel="stylesheet" href="{% static 'mainapp/css/desktop/appointment.css' %}"/>
+{% block form %}
+{% csrf_token %}
+<div class="table-container"> 
+<table>
+    <tbody>
+        {% for service in services %}
+        <tr>
+            <td>
+                <input type="checkbox" name="services" value="{{ service.id }}">
+            </td>
+            <td>{{ service.name }}</td>
+            <td>{{ service.time }}</td>
+            <td>{{ service.price }}</td>
+            <td>&#x20BD;</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
 {% endblock %}
 
 
-{% block content %}
-{% if user.is_authenticated and not user.is_superuser %}
 
-{% if error_message %}
-{{ error_message }}
-{% endif %}
-
-<form method="post" action="{% url 'appointment_step1' %}">
-    <div class="form-header">
-        <h1 class="form-title">Запись на прием</h1>
-        <div class="steps">
-            <div class="step active"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-        </div>
-    </div>
-
-
-    <div class="form-inside">
-        {% csrf_token %}
-        <div class="table-container"> 
-        <table>
-            <tbody>
-                {% for service in services %}
-                <tr>
-                    <td>
-                        <input type="checkbox" name="services" value="{{ service.id }}">
-                    </td>
-                    <td>{{ service.name }}</td>
-                    <td>{{ service.time }}</td>
-                    <td>{{ service.price }}</td>
-                    <td>&#x20BD;</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row d-flex justify-content-end ">
-            <div class="col-2">
-                <a href="{% url 'index' %}" style='text-decoration: none;' class="btn btn-left btn-main">Назад</a>
-
-            </div>
-            <div class="col-2">
-                <button type="submit" class="btn btn-right btn-main text-white">Далее</button>
-            </div>
-        </div>
-    </div>
-</form>
-{% else %}
-    <p class="centered-text">Авторизуйтесь чтобы записаться на прием &#x2764;&#xFE0F;</p>
-{% endif %}
-
-{% endblock %}

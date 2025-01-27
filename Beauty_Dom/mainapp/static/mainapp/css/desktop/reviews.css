@@ -76,6 +76,7 @@ a {
 
 .star {
     color: #cccccc; /* Цвет неактивных звезд */
+    
 }
 
 .star.filled {

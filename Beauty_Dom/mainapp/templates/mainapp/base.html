@@ -4,70 +4,68 @@
 <head>
     <meta charset="UTF-8">
     {% block title %}{% endblock %}
-    {% block extrastyles %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'mainapp/css/desktop/base.css' %}" media="screen">
+    {% block extrastyles %}{% endblock %}
 </head>
 <body>
     <div class="wrapper">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: white !important;">
-            <div class="container">
-                
-                <!-- Логотип -->
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <img src="{% static 'mainapp/images/Логотип.jpg' %}" alt="Beauty_Dom" height="50">
-                </a>
 
-                <!-- Кнопка для мобильного меню -->
-                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <!-- Логотип -->
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'mainapp/images/Логотип.jpg' %}" alt="Beauty_Dom" height="50">
+            </a>
 
-                <!-- Меню -->
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'appointment_step1' %}" class="nav-link {% if '/appointment_step' in request.path %}active{% endif %}">Запись на прием</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}">О нас</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'reviews' %}" class="nav-link {% if request.path == '/reviews/' %}active{% endif %}">Отзывы</a>
-                        </li>
+            <!-- Кнопка для мобильного меню -->
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                        {% if user.is_authenticated and not user.is_superuser %}
-                            <!-- Выдвигающееся меню для профиля -->
-                            <li class="nav-item dropdown">
-                                <button class="btn btn-link nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Профиль
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'profileuser' %}" class="dropdown-item {% if request.path == '/profileuser/' %}active{% endif %}">Профиль</a></li>
-                                    <li><a href="{% url 'my_appointments' %}" class="dropdown-item {% if request.path == '/my_appointments/' %}active{% endif %}">Мои записи</a></li>
-                                </ul>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a href="{% url 'login' %}" class="nav-link">Вход</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'signup' %}" class="nav-link">Регистрация</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+            <!-- Меню -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'appointment_step1' %}" class="nav-link {% if '/appointment_step' in request.path %}active{% endif %}">Запись на прием</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}">О нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'reviews' %}" class="nav-link {% if request.path == '/reviews/' %}active{% endif %}">Отзывы</a>
+                    </li>
+
+                    {% if user.is_authenticated and not user.is_superuser %}
+                        <!-- Выдвигающееся меню для профиля -->
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-link nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Профиль
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profileuser' %}" class="dropdown-item {% if request.path == '/profileuser/' %}active{% endif %}">Профиль</a></li>
+                                <li><a href="{% url 'my_appointments' %}" class="dropdown-item {% if request.path == '/my_appointments/' %}active{% endif %}">Мои записи</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'signup' %}" class="nav-link">Регистрация</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
     </header>
 
-    <div class="content">
+    <div class="content container">
         {% block content %}{% endblock %}
     </div>
 

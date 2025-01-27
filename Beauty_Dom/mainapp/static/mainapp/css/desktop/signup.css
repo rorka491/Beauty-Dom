@@ -15,7 +15,7 @@ body {
     border-radius: 10px;
     max-width: 600px;
     border: 2px solid #EFA3B0;
-    width: 100%;
+    width: 90%;
 }
 
 h1 {
@@ -80,19 +80,7 @@ h2 {
     font-weight: 300; /* Чем меньше значение, тем тоньше текст */
 }
 
-/* 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-} */
 
-/* .form-grid p,
-.form-grid input,
-.form-grid button {
-    margin: 0;
-    width: 100%;
-} */
  
 .container, .row {
     padding: 0; /* Убираем внутренние отступы */

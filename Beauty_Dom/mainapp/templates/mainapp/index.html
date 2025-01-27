@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    <title>{{ title }}</title>
+    <title>Главная страница</title>
 {% endblock %}
 
 {% block content %}
@@ -31,5 +31,194 @@
         </tbody>
     </table>
 {% endif %}
+
+
+<!-- Раздел с услугами -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Наши услуги</h2>
+      <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if service.image %}
+            <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+            {% else %}
+            <img src="{% static 'mainapp\images\WIN_20250127_01_03_07_Pro.jpg' %}" class="card-img-top" alt="Default Image">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ service.name }}</h5>
+              <p class="card-text">Описание {{ service.note_service }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </section>
+  
+  <!-- Раздел с отзывами -->
+  <section id="testimonials" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Отзывы наших клиентов</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">"Лучший салон, в который я когда-либо ходила! Очень довольна результатом."</p>
+              <footer class="blockquote-footer">Анна Иванова</footer>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">"Прекрасный сервис и внимание к деталям. Рекомендую всем!"</p>
+              <footer class="blockquote-footer">Мария Петрова</footer>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">"Очень профессиональные мастера и уютная атмосфера. Я в восторге!"</p>
+              <footer class="blockquote-footer">Елена Смирнова</footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Контактная информация -->
+  <section id="contact" class="bg-light py-5">
+    <div class="container text-center">
+      <h2 class="mb-4">Свяжитесь с нами</h2>
+      <p>Мы всегда рады помочь вам! Запишитесь на прием или задайте вопрос.</p>
+      <a href="mailto:contact@beautydom.com" class="btn btn-primary">Написать нам</a>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <!-- Блок с изображениями услуг -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{% static 'images/service1.jpg' %}" class="card-img-top" alt="Услуга 1">
+                <div class="card-body">
+                    <h5 class="card-title">Маникюр</h5>
+                    <p class="card-text">Профессиональный маникюр с использованием качественных материалов.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{% static 'images/service2.jpg' %}" class="card-img-top" alt="Услуга 2">
+                <div class="card-body">
+                    <h5 class="card-title">Педикюр</h5>
+                    <p class="card-text">Уход за ногтями и кожей ног, педикюр с дизайном.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{% static 'images/service3.jpg' %}" class="card-img-top" alt="Услуга 3">
+                <div class="card-body">
+                    <h5 class="card-title">Косметология</h5>
+                    <p class="card-text">Услуги по уходу за кожей лица и тела.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с отзывами клиентов -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">"Лучший маникюр в городе! Обслуживание на высшем уровне."</p>
+                    <footer class="blockquote-footer">Анна, клиент</footer>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">"Очень довольна результатом! Косметолог - настоящий профессионал."</p>
+                    <footer class="blockquote-footer">Марина, клиент</footer>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">"Я всегда возвращаюсь сюда. Атмосфера и качество услуг на высоте!"</p>
+                    <footer class="blockquote-footer">Елена, клиент</footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с ценами на услуги -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Маникюр</h5>
+                    <p class="card-text">Цена: 1200 руб.</p>
+                    <a href="#" class="btn btn-secondary">Записаться</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Педикюр</h5>
+                    <p class="card-text">Цена: 1500 руб.</p>
+                    <a href="#" class="btn btn-secondary">Записаться</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Косметология</h5>
+                    <p class="card-text">Цена: 2500 руб.</p>
+                    <a href="#" class="btn btn-secondary">Записаться</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с контактной информацией -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>Наши контакты</h3>
+            <p><strong>Телефон:</strong> +7 (123) 456-78-90</p>
+            <p><strong>Адрес:</strong> Москва, ул. Примерная, 10</p>
+            <p><strong>Email:</strong> info@beautydom.ru</p>
+        </div>
+        <div class="col-md-6">
+            <h3>Рабочие часы</h3>
+            <p><strong>Понедельник - Пятница:</strong> 10:00 - 20:00</p>
+            <p><strong>Суббота:</strong> 11:00 - 18:00</p>
+            <p><strong>Воскресенье:</strong> Выходной</p>
+        </div>
+    </div>
+
+    <!-- Блок с картой -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Как нас найти</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.593110624735!2d37.617634!3d55.755826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3d5c8a9a9a1f3%3A0x3e1d3e1a9f6d0c5a!2z0J3QsNC90LDRg9C60LDRgtCw!5e0!3m2!1sru!2sru!4v1612312312345" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 

@@ -85,15 +85,17 @@ class CustomerLoginView(LoginView):
 
 
 # главная страница
-class Index(TemplateView):
+class Index(ListView):
     template_name = 'mainapp/index.html'
+
+
 
     def get(self, request,):
         my_text = 'Загружаемые файлы'
-        title = 'Главная страница'
         form = VideoForm()
+        services = Service.objects.all()
         file_obj = VideoFile.obj_video.all()
-        context = {'my_text': my_text, 'form': form, 'title': title, 'file_obj': file_obj}
+        context = {'my_text': my_text, 'form': form,'file_obj': file_obj, 'services': services}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -101,10 +103,10 @@ class Index(TemplateView):
         if form.is_valid():
             form.save()
         my_text = 'Загружаемые файлы'
-        title = 'Главная страница'
+
         form = VideoForm()
         file_obj = VideoFile.obj_video.all()
-        context = {'my_text': my_text, 'form': form, 'title': title, 'file_obj': file_obj}
+        context = {'my_text': my_text, 'form': form, 'file_obj': file_obj}
         return render(request, self.template_name, context)
 
 
@@ -182,7 +184,8 @@ class ProfileUser(LoginRequiredMixin, ListView):
     model = CustomUser
 
     def get(self, request):
-        return render(request, self.template_name, {'user': request.user})
+        user_data = self.model.objects.get(id=self.request.user.id)
+        return render(request, self.template_name, {'user': request.user, 'user_data': user_data })
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

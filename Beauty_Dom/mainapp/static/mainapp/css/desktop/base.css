@@ -15,16 +15,16 @@ body {
 header {
     background-color: white; /* Белый фон для header */
     min-height: 50px; /* Минимальная высота header */
-    display: flex; /* Flexbox для размещения содержимого */
+
     align-items: center; /* Центрирование по вертикали */
-    justify-content: center; /* Центрирование по горизонтали */
+    justify-content: space-between; /* Раздвигает элементы по краям */ 
     font-size: 16px;
     width: 100%;
-    position: relative;
     position: fixed;
     z-index: 9999;
-
 }
+
+
 
 header::after {
     background: linear-gradient(to left, #B1CDE2, #EFA3B0);
@@ -44,8 +44,7 @@ header::after {
     justify-content: center; /* Центрирование по вертикали */
 
     /* Убедись, что у контейнера есть фиксированная высота или min-height */
-    min-height: 80vh; /* Минимальная высота 80% от высоты окна */
-    margin-top: 80px;
+    margin-top: 160px;
 }
 
 header::after {

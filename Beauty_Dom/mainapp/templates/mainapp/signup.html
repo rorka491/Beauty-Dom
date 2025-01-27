@@ -3,7 +3,6 @@
 {%  block extrastyles %} 
 <link rel="stylesheet" href="{% static 'mainapp/css/desktop/signup.css' %}" media="screen">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
 {% endblock %}
 
 
@@ -14,13 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
 </head>
-
-
 <body>
     <div class="divform"> 
         <div class="logo-container">
-            <img src="{% static 'mainapp/images/Логотип.png' %}" alt="Beauty_Dom">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'mainapp/images/Логотип.png' %}" alt="Beauty_Dom">
+            </a>
         </div>
+
         <h2>Регистрация</h2>
         {% if messages %}
         {% for message in messages %}

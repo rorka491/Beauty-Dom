@@ -8,7 +8,7 @@ from Beauty_Dom.settings import BREAK_AFTER_WORK
 # Create your models here.
 class CustomUser(AbstractUser):
     verification_code = models.CharField(max_length=100, blank=True, null=True)
-    # picture_user = models.ImageField(upload_to= )
+    picture_user = models.ImageField(upload_to='images/', blank=True, null=True)
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -57,7 +57,7 @@ class Service(models.Model):
     name = models.CharField(max_length=200, blank=False)
     time = models.DurationField(default='00:00:00')
     price = models.DecimalField(max_digits=20, decimal_places=0, blank=False)
-    image = models.ImageField(upload_to='mom_site/mainapp/static/mainapp/images', null=True, blank=True)
+    image = models.ImageField(upload_to='services/', null=True, blank=True)
     service_type = models.CharField(max_length=40, choices=CHOICES_TYPE, default='manicure')
     note_service = models.TextField(blank=True)
     

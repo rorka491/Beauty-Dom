@@ -178,7 +178,7 @@ class AdminAppointmentViewStep5(FormView):
             appointment.services.add(service)
 
         appointment.save
-        return HttpResponse('<h1>Готово</h1>')
+        return redirect('form_step1')
     
 
 

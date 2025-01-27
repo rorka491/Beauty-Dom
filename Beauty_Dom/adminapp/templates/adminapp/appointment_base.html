@@ -4,19 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'adminapp/css/adminapp/appointment_base.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/adminapp/appointment_base.css' %}"/>
     <title>Запись на прием</title>
     {%  block extrastyles %} 
     {% endblock %}
 </head>
-<body>
+<body >
+<div class="content">
     {% if user.is_authenticated and user.is_superuser %}
-    <header>
-
-    </header>
     {% if error_message %}
     {{ error_message }}
     {% endif %}
+<div>
     <form method="post" action="{% block url %}{% endblock url %}">
         <div class="form-header">
             <h1 class="form-title">Запись на прием</h1>
@@ -45,6 +46,8 @@
         <a href="{% url 'admin:index' %}">Войти</a>
     </p>
     {% endif %}
+</div>
+</div>
 </body>
 </html>
 {% block scripts %}

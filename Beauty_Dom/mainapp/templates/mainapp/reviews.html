@@ -19,7 +19,14 @@
             {% for review in reviews %}
             <div class="review-block ">
                 <div class="review-header ">
-                    <strong>{{ review.user.username }}</strong>
+                    <div>
+                        {% if review.user.picture_user %}
+                        <img src="{{ user.picture_user.url }}" alt="Фото профиля" class="rounded-circle" style="width: 50px; height: 50px;">
+                        {% else %}
+                        <img src="{% static 'mainapp\images\загрузка (2).jpeg' %}" class="rounded-circle" alt="Default Image" style="width: 150px; height: 150px;">
+                        {% endif %}
+                        <strong>{{ review.user.username }}</strong>
+                    </div>
                     <div class="review-rating">
                         {% for i in "12345" %}
                             <span class="star{% if i|add:0 <= review.rating %} filled{% endif %}">&#9733;</span>

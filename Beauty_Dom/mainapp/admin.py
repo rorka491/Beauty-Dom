@@ -21,11 +21,11 @@ class ServiceAdmin(admin.ModelAdmin):
 class UserAdmin(BaseUserAdmin):
 
     # Поля, которые будут отображаться в списке
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'verification_code',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'verification_code', 'picture_user')
 
     # Поля для редактирования в форме
     fieldsets = BaseUserAdmin.fieldsets + (
-        (None, {'fields': ('verification_code',)}),
+        (None, {'fields': ('verification_code', 'picture_user')}),
     )
 
 class AppointmentAdmin(admin.ModelAdmin):
