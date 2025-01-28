@@ -138,6 +138,65 @@ class SiteRating(models.Model):
         self.total_reviews = total_reviews
         self.save()
 
+class BlogPost(models.Model):
+    title = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True)
+    content = models.TextField()
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        default=CustomUser.objects.get(username='Nadezhda').id,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = 'Записи в блоге'
+        verbose_name_plural = 'Записи в блоге'
+
+    def __str__(self):
+        return self.title
+    
+
+class BlogPostPhotos(models.Model):
+    blog_post = models.ForeignKey(
+        BlogPost, 
+        on_delete=models.CASCADE,  # Удаление фотографий при удалении статьи
+        related_name='photos'
+    )
+
+    photo = models.ImageField(upload_to='blog_photos/')
+    caption = models.CharField(max_length=255, blank=True, null=False)
+
+
+    def __str__(self):
+        return f'{self.blog_post.title}'
+
+class BlogPostComment(models.Model):
+    author = models.ForeignKey(
+        CustomUser, 
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+
+    blog_post = models.ForeignKey(
+        BlogPost,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        null=True
+    )
+
+    text = models.TextField(max_length=2500)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Коментарии пользователей к записям в блоге'
+        verbose_name_plural = 'Коментарии пользователей к записям в блоге'
+        ordering = ['-created_at']  # Сортировка по умолчанию
+
+    def __str__(self):
+        return f'Пользователь {self.author.username} оставил коментарий {self.text[:100]}...'
+
 
 
 class Appointment(models.Model):

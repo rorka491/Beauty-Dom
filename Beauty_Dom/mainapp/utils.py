@@ -128,23 +128,20 @@ def calculate_total_price(service_ids):
     total_price = sum(service.price for service in selected_services)
     return total_price
 
-def calculate_end_time(selected_start_time: str, total_time: str) -> datetime.time:
+def calculate_end_time(selected_start_time: str, total_time: timedelta) -> datetime.time:
     # Преобразуем строку времени в объект datetime
-    selected_start_time = datetime.strptime(selected_start_time, "%H:%M")
+    start_time_obj = datetime.strptime(selected_start_time, "%H:%M")
     
-    # Преобразуем строку total_time в timedelta (например, "02:30" -> 2 часа 30 минут)
-    total_time_parts = total_time.split(':')
-    total_time_delta = timedelta(hours=int(total_time_parts[0]), minutes=int(total_time_parts[1]))
-
     # Добавляем продолжительность
-    end_time = selected_start_time + total_time_delta
+    end_time = start_time_obj + total_time
     
     # Возвращаем результат в формате строки
     return end_time.time()
 
-def calculate_end_time_after_break(end_time, break_after_work=BREAK_AFTER_WORK) -> datetime.time:
+def calculate_end_time_after_break(end_time: datetime.time, break_after_work=BREAK_AFTER_WORK) -> datetime.time:
     end_time = datetime.combine(date.today(), end_time)
-    return (break_after_work + end_time).time()
+    end_time_after_work = break_after_work + end_time
+    return end_time_after_work.time()
 
 
 def get_service_names(service_ids): 

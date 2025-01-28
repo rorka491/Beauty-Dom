@@ -93,7 +93,8 @@ class Index(ListView):
         form = VideoForm()
         services = Service.objects.all()
         file_obj = VideoFile.obj_video.all()
-        context = {'my_text': my_text, 'form': form,'file_obj': file_obj, 'services': services}
+        blog_posts = BlogPost.objects.prefetch_related('photos')
+        context = {'my_text': my_text, 'form': form,'file_obj': file_obj, 'services': services, 'blog_posts': blog_posts}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -158,6 +159,44 @@ class AddReview(FormView):
         review.user = self.request.user  # Присваиваем текущего пользователя
         review.save()  # Сохраняем отзыв с пользователем
         return super().form_valid(form)
+    
+class BlogPostView(DetailView):
+    template_name = 'mainapp/blog_post.html'
+    model = BlogPost
+
+    def get(self, request, slug):
+        post = BlogPost.objects.get(slug=slug)
+        post_photos = BlogPostPhotos.objects.filter(blog_post=post)
+        post_comments = BlogPostComment.objects.filter(blog_post=post)
+        form = CommentForm()
+        return render(request, self.template_name, {'post': post, 
+                                                    'post_photos': post_photos, 
+                                                    'post_comments': post_comments, 
+                                                    'form': form})
+    
+
+    def post(self, request, slug):
+        form = CommentForm(request.POST)
+        post = BlogPost.objects.get(slug=slug)
+        if form.is_valid():
+            # Создаем новый комментарий
+            comment = form.save(commit=False)
+            comment.blog_post = post
+            comment.author = request.user  # Привязываем комментарий к текущему пользователю
+            comment.save()
+        
+        # После добавления комментария, перезагружаем страницу с обновленными данными   
+        post_photos = BlogPostPhotos.objects.filter(blog_post=post)
+        post_comments = BlogPostComment.objects.filter(blog_post=post)
+        form = CommentForm()
+        return render(request, self.template_name, {'post': post, 
+                                                    'post_photos': post_photos, 
+                                                    'post_comments': post_comments, 
+                                                    'form': form})
+
+        
+
+    
 
 # Записи пользователя
 class MyAppointments(LoginRequiredMixin, ListView):
@@ -167,7 +206,7 @@ class MyAppointments(LoginRequiredMixin, ListView):
     def get(self, request):
         current_user = self.request.user
         current_client = Client.objects.get(user=current_user)
-        my_appointments = self.model.objects.filter(client=current_client, status='not_complete')
+        my_appointments = self.model.objects.filter(client=current_client, status='not_complete').order_by('date', 'start_time')
         return render(request, self.template_name, {'my_appointments': my_appointments})
     
 
@@ -325,13 +364,14 @@ class AppointmentViewStep4(BaseAppointmentViewStep):
 
         total_time = calculate_total_time(session_data['selected_services_ids'])
         end_time = calculate_end_time(session_data['selected_start_time'], total_time)
+        end_time_after_break  = calculate_end_time_after_break(end_time)
         
         return {
             'end_time': end_time,
             'total_time': total_time,
             'selected_date': session_data['selected_date'],
             'selected_start_time': session_data['selected_start_time'],
-            'end_time_after_break': calculate_end_time_after_break(end_time),
+            'end_time_after_break': end_time_after_break,
             'selected_services': get_service_names(session_data['selected_services_ids']),
             'total_price': calculate_total_price(session_data['selected_services_ids']),
         }

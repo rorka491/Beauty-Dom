@@ -37,6 +37,22 @@ class ClientAdmin(admin.ModelAdmin):
 class ReviewsAdmin(admin.ModelAdmin):
     list_display = ['user', 'is_approved']
 
+class BlogPostPhotosInline(admin.TabularInline):  # Можно заменить на StackedInline для другого стиля
+    model = BlogPostPhotos
+    extra = 1  # Количество пустых полей для добавления новых записей
+    fields = ('photo',)  # Поля, доступные для редактирования
+
+
+
+@admin.register(BlogPost)
+class CategotyAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [BlogPostPhotosInline] 
+
+
+
+
+
 
 
 admin.site.register(Service, ServiceAdmin)
@@ -48,6 +64,9 @@ admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(NotAvailaibleDates)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(VideoFile)
+admin.site.register(BlogPostPhotos)
+admin.site.register(BlogPostComment)
+
 
 
 

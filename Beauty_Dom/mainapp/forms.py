@@ -150,8 +150,22 @@ class VideoForm(forms.ModelForm):
         fields = '__all__'
 
 
+class CommentForm(forms.ModelForm):
 
-
+    class Meta:
+        model = BlogPostComment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Напишите ваш комментарий',
+                'rows': 3,
+                'id': 'comment',
+            }),
+        }
+        labels = {
+            'text': ''
+        }
 
 
 

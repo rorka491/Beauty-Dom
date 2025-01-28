@@ -1,0 +1,95 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Post Header -->
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="display-4 fw-bold">{{ post.title }}</h1>
+            <p class="text-muted">
+                <span>Автор: <strong>{{ post.author }}</strong></span> | 
+                <span>Дата: {{ post.created_at|date:"j F Y" }} г</span>
+            </p>
+        </div>
+    </div>
+    
+<!-- Post Content -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="border p-4 rounded shadow-sm">
+            <p class="fs-5">
+                {{ post.content }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Section -->
+<div class="row my-4">
+    <div class="col-md-12">
+        <div class="border p-4 rounded shadow-sm">
+            <div class="row">
+                {% for photo in post_photos %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+                        <div class="image-container">
+                            <img src="{{ photo.photo.url }}" class="img-fluid rounded shadow" alt="{{ photo.caption }}">
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Нет фотографий для этого поста.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="fw-bold">Добавить комментарий</h4>
+            {% if user.is_authenticated and not user.is_superuser %}
+            <form action="{% url 'blog_post' slug=post.slug %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form }}
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            <p>Вы не автор</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="fw-bold">Комментарии</h4>
+            {% if post.comments.all %}
+                {% for comment in post.comments.all %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">{{ comment.author.username }}</h6>
+                        <p class="card-text">{{ comment.text }}</p>
+                        <p class="text-muted small">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p>Пока нет комментариев. Будьте первым!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
