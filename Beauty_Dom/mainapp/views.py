@@ -276,7 +276,7 @@ class AppointmentViewStep2(BaseAppointmentViewStep):
             selected_date = str(form.cleaned_data['date'])
             available_start_time = get_available_start_time(selected_date, total_time)
 
-            self.save_session_data({'selected_date': selected_date, 'available_start_time': available_start_time, 'total_time': total_time})
+            self.save_session_data({'selected_date': selected_date, 'available_start_time': available_start_time})
 
             return redirect('appointment_step3')
 
@@ -322,14 +322,18 @@ class AppointmentViewStep4(BaseAppointmentViewStep):
 
     def all_need_params_in_session(self, request):
         session_data = self.get_session_data(['selected_date', 'selected_services_ids', 'selected_start_time', 'total_time'])
+
+        total_time = calculate_total_time(session_data['selected_services_ids'])
+        end_time = calculate_end_time(session_data['selected_start_time'], total_time)
+        
         return {
-            'selected_start_time': session_data['selected_start_time'],
-            'selected_services': get_service_names(session_data['selected_services_ids']),
+            'end_time': end_time,
+            'total_time': total_time,
             'selected_date': session_data['selected_date'],
-            'total_time': session_data['total_time'],
+            'selected_start_time': session_data['selected_start_time'],
+            'end_time_after_break': calculate_end_time_after_break(end_time),
+            'selected_services': get_service_names(session_data['selected_services_ids']),
             'total_price': calculate_total_price(session_data['selected_services_ids']),
-            'end_time': calculate_end_time(session_data['selected_start_time'], session_data['total_time']),
-            'end_time_after_break': calculate_end_time_after_break(calculate_end_time(session_data['selected_start_time'], session_data['total_time']))
         }
 
     
