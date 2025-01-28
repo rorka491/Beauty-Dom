@@ -22,8 +22,7 @@
             <div class="appointments-container">
                 <h2>Мои записи</h2>
                 {% if my_appointments %}
-                <div class="appointment">
-                    <table>
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Цена</th>
@@ -53,7 +52,6 @@
                         </tbody>
                         {% endfor %}
                     </table>
-                </div>
                 {% else %}
                 <div class="appointment">
                     <p>У вас нет актуальных записей</p>

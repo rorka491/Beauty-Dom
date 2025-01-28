@@ -115,7 +115,7 @@ def get_available_dates(selected_services):
     # Проверим, какие даты из доступных являются недоступными
     common_dates = [date for date in available_dates if date not in not_available_dates]
         
-    return common_dates
+    return [date.isoformat() for date in common_dates]
 
 def calculate_total_time(service_ids):
     """Рассчитывает общее время для выбранных услуг."""
@@ -133,6 +133,11 @@ def calculate_end_time(selected_start_time, total_time):
     datetime_obj = datetime.combine(datetime.today(), selected_start_time)
     end_time = datetime_obj + total_time
     return end_time.time()
+
+def calculate_end_time_after_break(end_time, break_after_work=BREAK_AFTER_WORK):
+    end_time = datetime.combine(date.today(), end_time)
+    return (break_after_work + end_time).time()
+
 
 def get_service_names(service_ids): 
     selected_services = Service.objects.filter(id__in=service_ids)
@@ -195,7 +200,7 @@ def get_available_start_time(selected_date, total_time):
 
         not_available_dates.extend(slots)
 
-    return [item for item in time_list if item not in not_available_dates]
+    return [item for item in time_list if item not in not_available_dates] 
 
     
 

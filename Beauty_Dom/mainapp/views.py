@@ -88,8 +88,6 @@ class CustomerLoginView(LoginView):
 class Index(ListView):
     template_name = 'mainapp/index.html'
 
-
-
     def get(self, request,):
         my_text = 'Загружаемые файлы'
         form = VideoForm()
@@ -214,7 +212,16 @@ class VerifyUserView(View):
         return redirect('login', permanent=True)  # Перенаправление на страницу входа
 
 # представления для записи / несколько шагов
-class AppointmentViewStep1(FormView):
+class BaseAppointmentViewStep(FormView):
+    def get_session_data(self, keys):
+        return {key: self.request.session.get(key) for key in keys}
+
+    def save_session_data(self, data):
+        for key, value in data.items():
+            self.request.session[key] = value
+
+
+class AppointmentViewStep1(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment1.html'
 
     def return_to_page(self, request, error_message=None):
@@ -231,7 +238,7 @@ class AppointmentViewStep1(FormView):
     def post(self, request):
 
         selected_services_ids = self.request.POST.getlist('services')
-        print(selected_services_ids)
+
         if not selected_services_ids:
             return self.return_to_page(request, 'Пожалуйста, выберите хотя бы одну услугу.')
 
@@ -242,20 +249,22 @@ class AppointmentViewStep1(FormView):
         # Доступные даты
         available_dates = get_available_dates(selected_services_ids)
 
-        # Сохранение в сессии
-        self.request.session['selected_services_ids'] = selected_services_ids
-        self.request.session['available_dates'] = [date.isoformat() for date in available_dates]
+
+        
+        self.save_session_data({'available_dates': available_dates, 
+                                'selected_services_ids': selected_services_ids}) 
 
 
         return redirect('appointment_step2')
 
 
-class AppointmentViewStep2(FormView):
+class AppointmentViewStep2(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment2.html'
+    form_class = DateForm
 
     def get(self, request):
-        available_dates = self.request.session.get('available_dates')
-        form = DateForm
+        available_dates = self.get_session_data(['available_dates'])['available_dates']
+        form = self.form_class
         return render(request, self.template_name, {'form': form, 'available_dates': available_dates})
 
     def post(self, request):
@@ -263,33 +272,33 @@ class AppointmentViewStep2(FormView):
         form = DateForm(request.POST)
         if form.is_valid():
             
-            total_time = calculate_total_time(self.request.session.get('selected_services_ids'))
+            total_time = calculate_total_time(self.get_session_data(['selected_services_ids'])['selected_services_ids'])
             selected_date = str(form.cleaned_data['date'])
             available_start_time = get_available_start_time(selected_date, total_time)
 
-            self.request.session['selected_date'] = selected_date
-            self.request.session['available_start_time'] = available_start_time
+            self.save_session_data({'selected_date': selected_date, 'available_start_time': available_start_time, 'total_time': total_time})
 
             return redirect('appointment_step3')
-    
-        available_dates = self.request.session.get('available_dates')
-        form = DateForm
+
+        
+        available_dates = self.get_session_data(['available_dates'])['available_dates']
+        form = self.form_class
         return render(request, self.template_name, {'form': form, 'availeble_dates': available_dates})
 
 
    
-class AppointmentViewStep3(FormView):
+class AppointmentViewStep3(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment3.html'
     form_class = StartTimeForm
     
     def get_choices(self):
-        available_start_time = self.request.session.get('available_start_time')
+        available_start_time = self.get_session_data(['available_start_time'])['available_start_time']
         choices = [(i, i) for i in available_start_time]
         return choices
 
     def return_to_page(self, request, form=None):
         form = self.form_class(self.request.POST or None, choices=self.get_choices())
-        title = 'Заптсь на прием'
+        title = 'Запись на прием'
         return render(request, self.template_name, {'form': form, 'title': title})
     
 
@@ -298,35 +307,31 @@ class AppointmentViewStep3(FormView):
     
 
     def post(self, request):
-        form = StartTimeForm(request.POST, choices=self.get_choices())
+        form = self.form_class(request.POST, choices=self.get_choices())
 
         if form.is_valid():
-            self.request.session['selected_start_time'] = str(form.cleaned_data['start_time']) 
+            self.save_session_data({'selected_start_time': str(form.cleaned_data['start_time'])})
             return redirect('appointment_step4')
 
         return self.return_to_page(request, form)
 
     
-class AppointmentViewStep4(FormView):
+class AppointmentViewStep4(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment4.html'
 
 
     def all_need_params_in_session(self, request):
-        selected_date, selected_services_ids, selected_start_time = self.get_data(request)
+        session_data = self.get_session_data(['selected_date', 'selected_services_ids', 'selected_start_time', 'total_time'])
         return {
-            'selected_start_time': selected_start_time,
-            'selected_services': get_service_names(selected_services_ids),
-            'selected_date': selected_date,
-            'total_time': calculate_total_time(selected_services_ids), 
-            'total_price': calculate_total_price(selected_services_ids),
-            'end_time': calculate_end_time(selected_start_time, calculate_total_time(selected_services_ids))
+            'selected_start_time': session_data['selected_start_time'],
+            'selected_services': get_service_names(session_data['selected_services_ids']),
+            'selected_date': session_data['selected_date'],
+            'total_time': session_data['total_time'],
+            'total_price': calculate_total_price(session_data['selected_services_ids']),
+            'end_time': calculate_end_time(session_data['selected_start_time'], session_data['total_time']),
+            'end_time_after_break': calculate_end_time_after_break(calculate_end_time(session_data['selected_start_time'], session_data['total_time']))
         }
 
-    def get_data(self, request):
-        return (self.request.session.get('selected_date'), 
-            self.request.session.get('selected_services_ids'),
-            self.request.session.get('selected_start_time')       
-        )
     
     def get(self, request):
         params = self.all_need_params_in_session(request)
@@ -334,16 +339,20 @@ class AppointmentViewStep4(FormView):
     
     def post(self, request):
         params = self.all_need_params_in_session(request)
+
         appointment = Appointment.objects.create(
             client=Client.objects.get(user=self.request.user),
             date=params['selected_date'],
             start_time=params['selected_start_time'],
             end_time=params['end_time'],
+            end_time_after_break=params['end_time_after_break'],
             total_price = params['total_price'],
+            total_time = params['total_time'],
             status='not_complete'
         )
+
         for name in params['selected_services']:
-            service = Service.objects.get(name=name)  # Или get_or_create
+            service = Service.objects.get(name=name)
             appointment.services.add(service)
 
         appointment.save

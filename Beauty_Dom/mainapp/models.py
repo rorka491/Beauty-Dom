@@ -84,6 +84,8 @@ class ProfileEmployer(models.Model):
     def __str__(self):
         return f'Описание {self.head}'
 
+# class Publish(models.Model):
+    
 
 class Review(models.Model):
 

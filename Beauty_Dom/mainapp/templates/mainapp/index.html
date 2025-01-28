@@ -53,11 +53,34 @@
           </div>
         </div>
         {% endfor %}
-
       </div>
     </div>
   </section>
   
+  <!-- Раздел с услугами -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Блог</h2>
+      <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if service.image %}
+            <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+            {% else %}
+            <img src="{% static 'mainapp\images\WIN_20250127_01_03_07_Pro.jpg' %}" class="card-img-top" alt="Default Image">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ service.name }}</h5>
+              <p class="card-text">Описание {{ service.note_service }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
   <!-- Раздел с отзывами -->
   <section id="testimonials" class="py-5">
     <div class="container">
