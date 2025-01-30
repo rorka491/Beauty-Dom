@@ -4,7 +4,7 @@ from django.forms import DateTimeInput
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django import forms
-
+from django.utils.html import format_html
 
 
 
@@ -34,6 +34,8 @@ class AppointmentAdmin(admin.ModelAdmin):
 class ClientAdmin(admin.ModelAdmin):
     list_display = ['name', 'last_name', 'phone_number', 'user__username']
 
+
+@admin.register(Review)
 class ReviewsAdmin(admin.ModelAdmin):
     list_display = ['user', 'is_approved']
 
@@ -51,13 +53,41 @@ class CategotyAdmin(admin.ModelAdmin):
 
 
 
+@admin.register(PromoCode)
+class PromoCodeAdmin(admin.ModelAdmin):
+    list_display = ("code", "discount", "expires_at", "is_active")
+    actions = ["generate_promo_codes"]
+    
+    
+    @admin.action(description='Создать 10 промокодов')
+    def generate_codes(self, request, queryset):
+        from datetime import date
+        from .models import Service
+
+        services = Service.objects.all()[:3]  # Применить к первым 3 сервисам
+        PromoCode.generate_codes(count=10, discount=10.0, expires_at=date(2025, 12, 31), services=services)
+
+        self.message_user(request, "Создано 10 промокодов!")
+
+    def create_promo_codes_button(self, request):
+        return format_html(
+            '<a class="button" href="{}">Создать 12 промокодов</a>',
+            "generate_promo_codes"
+    )
+
+    create_promo_codes_button.allow_tags = True
+    create_promo_codes_button.short_description = "Создать 12 промокодов"
+    
+
+
+
 
 
 
 
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ProfileEmployer)
-admin.site.register(Review, ReviewsAdmin)
+# admin.site.register(Review, ReviewsAdmin)
 admin.site.register(SiteRating)
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(Appointment, AppointmentAdmin)

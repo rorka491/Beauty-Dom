@@ -168,6 +168,9 @@ AUTH_USER_MODEL = 'mainapp.CustomUser'
 
 START_WORK = time(9, 0)
 END_WORK = time(17, 0)
+STEP = timedelta(minutes=15)
+BREAK_AFTER_WORK = timedelta(minutes=30)
+
 # Преобразуем время в datetime, используя произвольную дату (например, сегодня)
 today = datetime.today()
 start_time = datetime.combine(today, START_WORK)
@@ -176,7 +179,7 @@ end_time = datetime.combine(today, END_WORK)
 # Находим разницу между двумя datetime объектами
 WORKDAY_DURATION = end_time - start_time
 
-BREAK_AFTER_WORK = timedelta(minutes=15)
+
 
 is_verify =  False
 

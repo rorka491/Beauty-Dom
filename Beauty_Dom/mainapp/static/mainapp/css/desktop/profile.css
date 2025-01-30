@@ -14,6 +14,11 @@
 
 }
 
+.container {
+    max-width: 1200px; /* Ограничение по ширине на больших экранах */
+    width: 100%; /* Заполнение на маленьких экранах */
+}
+
 .user-container h2 {
     font-size: 24px;           
     margin-bottom: 15px;      
@@ -36,10 +41,10 @@
 
 .appointment {
     padding: 20px;
-    height: 450px; 
+ 
     width: 100%;
     background-color: #ffffff;
-    overflow-y: auto; 
+
     overflow-x: auto; 
 }
 

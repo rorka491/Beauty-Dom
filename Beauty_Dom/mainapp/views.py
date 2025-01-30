@@ -194,9 +194,6 @@ class BlogPostView(DetailView):
                                                     'post_comments': post_comments, 
                                                     'form': form})
 
-        
-
-    
 
 # Записи пользователя
 class MyAppointments(LoginRequiredMixin, ListView):
@@ -214,6 +211,13 @@ class MyAppointments(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Мои записи'
         return context
+    
+def delete_appointment(reuquest, id):
+    appointment = Appointment.objects.get(id=id)
+    appointment.delete()
+    return redirect('my_appointments')
+
+
 
 # Страница пользователя
 class ProfileUser(LoginRequiredMixin, ListView):
@@ -264,7 +268,7 @@ class AppointmentViewStep1(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment1.html'
 
     def return_to_page(self, request, error_message=None):
-        services = Service.objects.all()
+        services = Service.objects.all().order_by('service_type')
 
         if error_message:
             return render(request, self.template_name, {'services': services, 'error_message': error_message})  
@@ -287,6 +291,8 @@ class AppointmentViewStep1(BaseAppointmentViewStep):
 
         # Доступные даты
         available_dates = get_available_dates(selected_services_ids)
+    
+        
 
 
         

@@ -5,7 +5,6 @@ from django.contrib.sessions.models import Session
 from django.db.models.signals import post_delete
 from django.utils import timezone
 from .models import Review, Appointment, Service
-from .utils import calculate_end_time, calculate_total_price, calculate_total_time
 from .models import CustomUser, Client
 
 
@@ -25,7 +24,7 @@ def update_site_rating_on_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=CustomUser)
 def create_client_profile(sender, instance, created, **kwargs):
-    if created:
+    if created and not instance.is_staff:
         Client.objects.create(
             user = instance,
             name = instance.first_name,

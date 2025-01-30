@@ -17,6 +17,7 @@ urlpatterns = [
     path('signup/', CustomerSignUpView.as_view(), name='signup'),
     path('profileuser/', ProfileUser.as_view(), name='profileuser'),
     path('my_appointments/', MyAppointments.as_view(), name='my_appointments'),
+    path('delete_appointment/<int:id>', delete_appointment,  name='delete_appointment'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('verify/<uuid:code>/', VerifyUserView.as_view(), name='verify'),
     path('delete_account/', delete_account, name='delete_account'),

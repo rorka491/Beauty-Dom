@@ -13,55 +13,62 @@
 
 {% block content %}
 
-
-
 {% if user.is_authenticated and not user.is_superuser %}
-<div class="container">
-
-        <div class="col">
-            <div class="appointments-container">
-                <h2>Мои записи</h2>
-                {% if my_appointments %}
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Цена</th>
-                                <th>Длительность</th>
-                                <th>Дата</th>
-                                <th>Время начала</th>
-                                <th>Время окончания</th>
-                                <th>Услуги</th>
-                            </tr>
-                        </thead>
+<div class="container overflow">
+    <div class="col">
+        <div class="appointments-container">
+            <h2>Мои записи</h2>
+            {% if my_appointments %}
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Цена</th>
+                            <th>Длительность</th>
+                            <th>Дата</th>
+                            <th>Время начала</th>
+                            <th>Время окончания</th>
+                            <th>Услуги</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for appointment in my_appointments %}
-                        <tbody>
-                            <td>{{ appointment.total_price }} &#x20BD;</td>
-                            <td>{{ appointment.total_time }}</td>
-                            <td>{{ appointment.date }}</td>
-                            <td>{{ appointment.start_time }}</td>
-                            <td>{{ appointment.end_time }}</td>
+                        <tr>
                             <td>
-                                {% for service in appointment.services.all %}
-                                <ul style="list-style-type: none;">
-                                    <li>
-                                        {{ service.name }}
-                                    </li>
-                                </ul>
-                                {% endfor %}
+                                <a href="{% url 'delete_appointment' appointment.id %}" 
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Вы точно хотите отменить запись?');">
+                                    Отменить
+                                </a>
                             </td>
-                        </tbody>
+                            <td class="text-nowrap">{{ appointment.total_price }} &#x20BD;</td>
+                            <td class="text-nowrap">{{ appointment.total_time }}</td>
+                            <td class="text-nowrap">{{ appointment.date }}</td>
+                            <td class="text-nowrap">{{ appointment.start_time }}</td>
+                            <td class="text-nowrap">{{ appointment.end_time }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for service in appointment.services.all %}
+                                    <li>{{ service.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
                         {% endfor %}
-                    </table>
-                {% else %}
-                <div class="appointment">
-                    <p>У вас нет актуальных записей</p>
-                </div>
-                {% endif %}
+                    </tbody>
+                </table>
             </div>
+            {% else %}
+            <div class="appointment">
+                <p>У вас нет актуальных записей</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endif %}
+
 
 
 

@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db.models import Avg
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 from Beauty_Dom.settings import BREAK_AFTER_WORK
+import uuid
+from . utils import IntervalHandler
 
 
 # Create your models here.
@@ -197,8 +199,6 @@ class BlogPostComment(models.Model):
     def __str__(self):
         return f'Пользователь {self.author.username} оставил коментарий {self.text[:100]}...'
 
-
-
 class Appointment(models.Model):
 
 
@@ -207,10 +207,11 @@ class Appointment(models.Model):
         verbose_name_plural = 'Записи на прием'  # Измените на нужное множественное число
         ordering = ['-status']
         
-    CHOICES = [
+    CHOICES_STATUS = [
         ('complete', 'ЗАВЕРШЕНО'),
         ('not_complete', 'НЕ ЗАВЕРШЕНО')
     ]
+
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE, null=True)
     services = models.ManyToManyField(Service)
@@ -221,7 +222,7 @@ class Appointment(models.Model):
     start_time = models.TimeField(null=True)
     end_time = models.TimeField(null=True)
     end_time_after_break = models.TimeField(null=True)
-    status = models.CharField(choices=CHOICES, default='not_complete', max_length=12)
+    status = models.CharField(choices=CHOICES_STATUS, default='not_complete', max_length=12)
     session_key = models.CharField(max_length=40, null=True, blank=True)  # Хранение ключа сессии для связи
 
     def display_services(self):
@@ -229,6 +230,15 @@ class Appointment(models.Model):
     
     display_services.short_description = 'Услуги'
 
+    @classmethod
+    def get_available_days(cls, duration_minutes, days_ahead=30):
+        """Возвращает все доступные дни для записи, используя IntervalHandler."""
+        return IntervalHandler.get_available_days(duration_minutes, cls, days_ahead)
+
+    @classmethod
+    def get_available_slots(cls, date, duration_minutes):
+        """Возвращает доступные слоты на определенную дату."""
+        return IntervalHandler.get_available_slots(date, duration_minutes, cls)
 
 
         
@@ -263,6 +273,46 @@ class VideoFile(models.Model):
 
     def __str__(self):
         return self.title
+    
+class PromoCode(models.Model):
+    code = models.CharField(max_length=12, unique=True)
+    is_active = models.BooleanField(default=True)
+    discount = models.DecimalField(decimal_places=2, max_digits=5)
+    services = models.ManyToManyField(Service, related_name='promo_codes')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    expires_at=models.DateField()
+
+    def is_valid(self):
+        """Проверяет, активен ли промокод."""
+        return self.is_active and self.expires_at >= date.today()
+
+    def __str__(self):
+        return f"{self.code} - {self.discount}%"
+
+    class Meta:
+        verbose_name = "Промокод"
+        verbose_name_plural = "Промокоды"
+
+    @classmethod
+    def generate_codes(cls, count, discount, expires_at, services):
+        """Создаёт `count` промокодов с указанными параметрами."""
+        promo_codes = [
+            cls(
+                code=str(uuid.uuid4)[:8],
+                discount=discount,
+                expires_at=expires_at
+            )
+            for _ in range(count)
+        ]
+
+        created_codes = cls.objects.bulk_create(promo_codes)
+
+        for promo_code in created_codes:
+            promo_code.services.set(services)
+
+        return created_codes
+    
+
 
 
 
