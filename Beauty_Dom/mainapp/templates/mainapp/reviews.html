@@ -21,9 +21,9 @@
                 <div class="review-header ">
                     <div class="d-flex">
                         {% if review.user.picture_user %}
-                        <img src="{{ user.picture_user.url }}" alt="Фото профиля" class="rounded-circle" style="width: 50px; height: 50px;">
+                        <img src="{{ review.user.picture_user.url }}" alt="Фото профиля" class="rounded-circle" style="width: 50px; height: 50px;">
                         {% else %}
-                        <img src="{% static 'mainapp\images\загрузка (2).jpeg' %}" class="rounded-circle" alt="Default Image" style="width: 50px; height: 50px;">
+                        <img src="{% static 'mainapp/images/Фавикон_логотип.jpg' %}" class="rounded-circle" alt="Default Image" style="width: 50px; height: 50px;">
                         {% endif %}
                         <p>
                             {{ review.user.username }}

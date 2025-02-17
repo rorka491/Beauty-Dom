@@ -6,8 +6,6 @@ from Beauty_Dom.settings import BREAK_AFTER_WORK
 import uuid
 
 
-
-# Create your models here.
 class CustomUser(AbstractUser):
     verification_code = models.CharField(max_length=100, blank=True, null=True)
     picture_user = models.ImageField(upload_to='images/', blank=True, null=True)
@@ -140,6 +138,9 @@ class SiteRating(models.Model):
         self.total_reviews = total_reviews
         self.save()
 
+
+
+
 class BlogPost(models.Model):
     title = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True)
@@ -147,7 +148,6 @@ class BlogPost(models.Model):
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        default=CustomUser.objects.get(username='Nadezhda').id,
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

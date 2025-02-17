@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'db_mysql',
         'USER': 'rodion',
         'PASSWORD': '12345',
-        'HOST': 'localhost',  # Или другой адрес
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
