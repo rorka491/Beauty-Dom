@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-bd)v_r-6vyyibm5nj3m0yn#g3xyrs(=dhxtju3yr0#)l$_i4vv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = ['https://7972-176-197-198-140.ngrok-free.app']
 # Application definition
 
@@ -181,7 +181,7 @@ WORKDAY_DURATION = end_time - start_time
 
 
 
-is_verify =  False
+is_verify =  True
 
 
 

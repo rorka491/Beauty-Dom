@@ -15,8 +15,8 @@ urlpatterns = [
     path('add_review/', AddReview.as_view(), name='add_review'),
     path('login/', CustomerLoginView.as_view(), name='login'),
     path('signup/', CustomerSignUpView.as_view(), name='signup'),
-    path('profileuser/', ProfileUser.as_view(), name='profileuser'),
-    path('my_appointments/', MyAppointments.as_view(), name='my_appointments'),
+    path('profile_user/', ProfileUser.as_view(), name='profile_user'),
+    path('profile_superuser/', ProfileSuperUser.as_view(), name='profile_superuser'),
     path('delete_appointment/<int:id>', delete_appointment,  name='delete_appointment'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('verify/<uuid:code>/', VerifyUserView.as_view(), name='verify'),
@@ -27,8 +27,10 @@ urlpatterns = [
     path('appointment_step4/', AppointmentViewStep4.as_view(), name='appointment_step4'),
     path('recover_password1/', RecoverPasswordStep1.as_view(), name='recover_password1'),
     path('recover_password2/<uuid:code>/', RecoverPasswordStep2.as_view(), name='recover_password2'),
-    path('blog_post/<slug:slug>', BlogPostView.as_view(), name='blog_post')
-    
+    path('about/blog_post/<slug:slug>', BlogPostView.as_view(), name='blog_post'),
+    path("upload_picture/", upload_picture, name="upload_picture"),
+    path('example/', lambda request: render(request, 'mainapp/example.html')),
+    path('example2/', lambda request: render(request, 'mainapp/example2.html')),
 ]
 
 if settings.DEBUG:

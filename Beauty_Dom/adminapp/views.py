@@ -5,10 +5,12 @@ from mainapp.models import *
 from adminapp.forms import *
 from mainapp.utils import *
 from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, WORKDAY_DURATION
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # представления для записи / несколько шагов
 
-class AdminAppointmentViewStep1(FormView):
+class AdminAppointmentViewStep1(LoginRequiredMixin, FormView):
     template_name = 'adminapp/appointment1.html'
 
     def get(self, request):
@@ -38,7 +40,7 @@ class AdminAppointmentViewStep1(FormView):
 
 
 
-class AdminAppointmentViewStep2(FormView):
+class AdminAppointmentViewStep2(LoginRequiredMixin, FormView):
     template_name = 'adminapp/appointment2.html'
 
     def return_to_page(self, request, error_message=None):
@@ -67,48 +69,45 @@ class AdminAppointmentViewStep2(FormView):
             return self.return_to_page(request, 'Длительность выбранных услуг превышает рабочий день.')
         
         # Доступные даты
-        available_dates = get_available_dates(selected_services_ids)
+
 
         # Сохранение в сессии
         self.request.session['selected_services_ids'] = selected_services_ids
-        self.request.session['available_dates'] = [date.isoformat() for date in available_dates]
+
 
 
         return redirect('form_step3')
 
 
 
-class AdminAppointmentViewStep3(FormView):
+class AdminAppointmentViewStep3(LoginRequiredMixin, FormView):
     template_name = 'adminapp/appointment3.html'
 
-    def get(self, request):
+    def render_page(self, request):
         available_dates = self.request.session.get('available_dates')
         form = DateForm
-        print(available_dates)
         return render(request, self.template_name, {'form': form, 'available_dates': available_dates})
+        
+
+    def get(self, request):
+        return self.render_page(request)
 
     def post(self, request):
 
         form = DateForm(request.POST)
         if form.is_valid():
-            
-            total_time = calculate_total_time(self.request.session.get('selected_services_ids'))
             selected_date = str(form.cleaned_data['date'])
-            available_start_time = get_available_start_time(selected_date, total_time)
-
             self.request.session['selected_date'] = selected_date
-            self.request.session['available_start_time'] = available_start_time
+
 
             return redirect('form_step4')
-    
-        available_dates = self.request.session.get('available_dates')
-        form = DateForm
-        return render(request, self.template_name, {'form': form, 'availeble_dates': available_dates})
+        
+        return self.render_page(request)
 
 
 
    
-class AdminAppointmentViewStep4(FormView):
+class AdminAppointmentViewStep4(LoginRequiredMixin, FormView):
     template_name = 'adminapp/appointment4.html'
     form_class = StartTimeForm
     
@@ -137,7 +136,7 @@ class AdminAppointmentViewStep4(FormView):
         return self.return_to_page(request)
 
     
-class AdminAppointmentViewStep5(FormView):
+class AdminAppointmentViewStep5(LoginRequiredMixin, FormView):
     template_name = 'adminapp/appointment5.html'
 
     def all_need_params_in_session(self, request):

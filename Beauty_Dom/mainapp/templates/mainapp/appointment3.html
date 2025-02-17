@@ -3,16 +3,18 @@
 
 {% block url %}{% url 'appointment_step3' %}{% endblock url %}
 
-{% block steps %}
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step"></div>
-{% endblock %}
-
 
 {% block form %}
 {% csrf_token %}
-{{ form }}
+<div class="flex-grow-1 " >
+    <div class="radio-container">
+        {% for radio in form.start_time %}
+        <div class="radio-box">
+            {{ radio.tag }}
+            <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+        </div>
+    {% endfor %}
+    </div>
+</div>
 {% endblock %}
 

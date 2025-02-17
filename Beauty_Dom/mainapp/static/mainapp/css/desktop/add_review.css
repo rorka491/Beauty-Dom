@@ -50,11 +50,6 @@ form {
     border-radius: 5px;
 }
 
-.form-control, .form-group label, .btn-primary {
-    font-family: 'Raleway', sans-serif;
-}
-
-
 
 /* Стиль для кнопки */
 .btn-primary {
@@ -82,7 +77,6 @@ textarea {
     height: 150px;
     
 }
-
 
 .star-rating {
     display: flex;

@@ -3,19 +3,31 @@
 
 {% block url %}{% url 'appointment_step4' %}{% endblock url %}
 
-{% block steps %}
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step active"></div>
-{% endblock %}
 
 {% block form %}
 {% csrf_token %}
-{{ selected_start_time }}
-{{ end_time }}
-{{ selected_date }}
-{{ selected_services }}
-{{ total_time }}
-{{ total_price }}
+
+<div class="flex-grow-1 ">
+    <div class="order-details row">
+        <div class="col-md-12 col-lg-6">
+            <h3>Детали заказа</h3>
+            <p><strong>Дата:</strong> {{ selected_date }}</p>
+            <p><strong>Начало:</strong> {{ selected_start_time }}</p>
+            <p><strong>Окончание:</strong> {{ end_time }} </p>
+            <p><strong>Длительность:</strong> {{ total_time }}</p>
+            <p><strong>Адрес:</strong> Ул. Пушкина д. 4</p>
+
+        </div>
+        <div class="col-md-12 col-lg-6">
+            <h3>Услуги в заказе:</h3>
+            {% for service in selected_services %}
+            <ul>
+                {{ service }}
+            </ul>
+            {% endfor %}
+        </div>
+
+        <p><strong>Итого:</strong> {{ total_price }}₽</p>
+    </div>
+</div>
 {% endblock %}

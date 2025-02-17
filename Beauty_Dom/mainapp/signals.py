@@ -21,7 +21,6 @@ def update_site_rating_on_delete(sender, instance, **kwargs):
     site_rating.update_rating()
 
 
-
 @receiver(post_save, sender=CustomUser)
 def create_client_profile(sender, instance, created, **kwargs):
     if created and not instance.is_staff:

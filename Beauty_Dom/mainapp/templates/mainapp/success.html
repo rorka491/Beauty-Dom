@@ -6,11 +6,12 @@
 
 {%  block extrastyles %} 
 <link rel="stylesheet" href="{% static 'mainapp/css/desktop/success.css' %}">
-<link rel="stylesheet" href="{% static 'mainapp/css/mobile/success.css' %}"
+<link rel="stylesheet" href="{% static 'mainapp/css/mobile/success.css' %}">
 {% endblock %}
 
 
 {% block content %}
+
 <div class="content">
     <div class="checkmark-box">
         <div class="checkmark-container">
@@ -31,4 +32,5 @@
         <div class="message">На адрес {{ request.session.email }} отправлена ссылка </div>
     {% endif %}
 </div>
+
 {% endblock %}

@@ -19,8 +19,6 @@ from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
-
 #представление для регистрации
 class CustomerSignUpView(FormView):
     form_class = CustomerSignUpForm
@@ -93,8 +91,7 @@ class Index(ListView):
         form = VideoForm()
         services = Service.objects.all()
         file_obj = VideoFile.obj_video.all()
-        blog_posts = BlogPost.objects.prefetch_related('photos')
-        context = {'my_text': my_text, 'form': form,'file_obj': file_obj, 'services': services, 'blog_posts': blog_posts}
+        context = {'my_text': my_text, 'form': form,'file_obj': file_obj, 'services': services}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -117,13 +114,13 @@ def delete_video(request, id):
 # стпаница о нас
 class About(ListView):
     template_name = 'mainapp/about.html'
-    model = ProfileEmployer
-    context_object_name = 'profiles'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'О нас'
-        return context
+    def get(self, request,):
+        blog_posts = BlogPost.objects.prefetch_related('photos')
+        profiles = ProfileEmployer.objects.all()
+
+        context = {'title': 'О нас', 'blog_posts': blog_posts, 'profiles': profiles}
+        return render(request, self.template_name, context)
 
 # страница отзывов  
 class Reviews(ListView):
@@ -160,6 +157,7 @@ class AddReview(FormView):
         review.save()  # Сохраняем отзыв с пользователем
         return super().form_valid(form)
     
+    
 class BlogPostView(DetailView):
     template_name = 'mainapp/blog_post.html'
     model = BlogPost
@@ -194,44 +192,37 @@ class BlogPostView(DetailView):
                                                     'post_comments': post_comments, 
                                                     'form': form})
 
-
-# Записи пользователя
-class MyAppointments(LoginRequiredMixin, ListView):
-    template_name = 'mainapp/userappointment.html'
-    model = Appointment
-
-    def get(self, request):
-        current_user = self.request.user
-        current_client = Client.objects.get(user=current_user)
-        my_appointments = self.model.objects.filter(client=current_client, status='not_complete').order_by('date', 'start_time')
-        return render(request, self.template_name, {'my_appointments': my_appointments})
-    
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Мои записи'
-        return context
     
 def delete_appointment(reuquest, id):
     appointment = Appointment.objects.get(id=id)
     appointment.delete()
-    return redirect('my_appointments')
+    return redirect('profile_user')
 
 
 
 # Страница пользователя
 class ProfileUser(LoginRequiredMixin, ListView):
-    template_name = 'mainapp/profileuser.html'
+    template_name = 'mainapp/profile_user.html'
     model = CustomUser
 
     def get(self, request):
         user_data = self.model.objects.get(id=self.request.user.id)
-        return render(request, self.template_name, {'user': request.user, 'user_data': user_data })
+        current_user = self.request.user
+        current_client = Client.objects.get(user=current_user)
+        my_appointments = Appointment.objects.filter(client=current_client, status='not_complete').order_by('date', 'start_time')
+        return render(request, self.template_name, {'user': request.user, 'user_data': user_data, 'my_appointments': my_appointments })
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Профиль'
         return context
+    
+class ProfileSuperUser(LoginRequiredMixin, TemplateView):
+    template_name = 'mainapp/profile_superuser.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {'user': request.user})
+
 
 # предназначена для удаления учетной записи пользователя
 @login_required
@@ -257,7 +248,11 @@ class VerifyUserView(View):
 # представления для записи / несколько шагов
 class BaseAppointmentViewStep(FormView):
     def get_session_data(self, keys):
+        if isinstance(keys, str):
+            return self.request.session.get(keys)
+        
         return {key: self.request.session.get(key) for key in keys}
+    
 
     def save_session_data(self, data):
         for key, value in data.items():
@@ -267,37 +262,40 @@ class BaseAppointmentViewStep(FormView):
 class AppointmentViewStep1(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment1.html'
 
-    def return_to_page(self, request, error_message=None):
-        services = Service.objects.all().order_by('service_type')
 
-        if error_message:
-            return render(request, self.template_name, {'services': services, 'error_message': error_message})  
-          
-        return render(request, self.template_name, {'services': services})
+    def render_page(self, request, error_messages=None):
+        services = Service.objects.all().order_by('service_type')
+        step_text = 'Выберите услугу'
+        step_count = 1
+
+
+        context = {'services': services, 'step_text': step_text, 'step_count': step_count}
+        if error_messages:
+            context['error_messages'] = [error_messages]
+
+        return render(request, self.template_name, context)
             
     def get(self, request):
-        return self.return_to_page(request)
+        return self.render_page(request)
 
     def post(self, request):
 
         selected_services_ids = self.request.POST.getlist('services')
 
         if not selected_services_ids:
-            return self.return_to_page(request, 'Пожалуйста, выберите хотя бы одну услугу.')
+            return self.render_page(request, 'Пожалуйста, выберите хотя бы одну услугу.')
 
         total_time = calculate_total_time(selected_services_ids)
         if total_time >= WORKDAY_DURATION:
-            return self.return_to_page(request, 'Длительность выбранных услуг превышает рабочий день.')
+            return self.render_page(request, 'Длительность выбранных услуг превышает рабочий день.')
 
         # Доступные даты
-        available_dates = get_available_dates(selected_services_ids)
-    
-        
+        available_dates, available_dates_times = Day.create_available_list_days(30, calculate_total_time(selected_services_ids))
 
-
-        
-        self.save_session_data({'available_dates': available_dates, 
-                                'selected_services_ids': selected_services_ids}) 
+        self.save_session_data({'available_dates': available_dates,
+                                'selected_services_ids': selected_services_ids,
+                                'available_dates': available_dates,
+                                'available_dates_times': available_dates_times})
 
 
         return redirect('appointment_step2')
@@ -307,28 +305,36 @@ class AppointmentViewStep2(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment2.html'
     form_class = DateForm
 
-    def get(self, request):
-        available_dates = self.get_session_data(['available_dates'])['available_dates']
+    def render_page(self, request, error_messages=None):
+        available_dates = self.get_session_data('available_dates')
         form = self.form_class
-        return render(request, self.template_name, {'form': form, 'available_dates': available_dates})
+        step_text = 'Выберите день'
+        step_count = 2
+
+
+        context = {'form': form, 'available_dates': available_dates, 'step_text': step_text, 'step_count': step_count}
+        # if error_messages:
+        #     context[error_messages] = [error_messages]
+        return render(request, self.template_name, {'form': form,
+                                                    'available_dates': available_dates,
+                                                    'step_text': step_text,
+                                                    'step_count': step_count})
+
+    def get(self, request):
+        return self.render_page(request)
 
     def post(self, request):
 
         form = DateForm(request.POST)
-        if form.is_valid():
-            
-            total_time = calculate_total_time(self.get_session_data(['selected_services_ids'])['selected_services_ids'])
-            selected_date = str(form.cleaned_data['date'])
-            available_start_time = get_available_start_time(selected_date, total_time)
 
-            self.save_session_data({'selected_date': selected_date, 'available_start_time': available_start_time})
+        if form.is_valid():
+            selected_date = str(form.cleaned_data['date'])
+
+            self.save_session_data({'selected_date': selected_date})
 
             return redirect('appointment_step3')
 
-        
-        available_dates = self.get_session_data(['available_dates'])['available_dates']
-        form = self.form_class
-        return render(request, self.template_name, {'form': form, 'availeble_dates': available_dates})
+        return self.render_page(request)
 
 
    
@@ -337,18 +343,24 @@ class AppointmentViewStep3(BaseAppointmentViewStep):
     form_class = StartTimeForm
     
     def get_choices(self):
-        available_start_time = self.get_session_data(['available_start_time'])['available_start_time']
-        choices = [(i, i) for i in available_start_time]
+        selected_date = self.get_session_data('selected_date')
+        available_dates_times = self.get_session_data('available_dates_times')
+        available_start_times = available_dates_times[selected_date] 
+
+        choices = [(i, i) for i in available_start_times]
         return choices
 
-    def return_to_page(self, request, form=None):
+    def render_page(self, request, form=None):
         form = self.form_class(self.request.POST or None, choices=self.get_choices())
-        title = 'Запись на прием'
-        return render(request, self.template_name, {'form': form, 'title': title})
+        step_text = 'Выберите время'
+        step_count = 3
+        return render(request, self.template_name, {'form': form,
+                                                    'step_text': step_text,
+                                                    'step_count': step_count})
     
 
     def get(self, request):
-        return self.return_to_page(request)
+        return self.render_page(request)
     
 
     def post(self, request):
@@ -358,12 +370,17 @@ class AppointmentViewStep3(BaseAppointmentViewStep):
             self.save_session_data({'selected_start_time': str(form.cleaned_data['start_time'])})
             return redirect('appointment_step4')
 
-        return self.return_to_page(request, form)
+        return self.render_page(request, form)
 
     
 class AppointmentViewStep4(BaseAppointmentViewStep):
     template_name = 'mainapp/appointment4.html'
 
+    def render_page(self, request):
+        params = self.all_need_params_in_session(request)
+        params['step_text'] = 'Подтвердите запись'
+        params['step_count'] = 4
+        return render(request, self.template_name, params)
 
     def all_need_params_in_session(self, request):
         session_data = self.get_session_data(['selected_date', 'selected_services_ids', 'selected_start_time', 'total_time'])
@@ -384,13 +401,12 @@ class AppointmentViewStep4(BaseAppointmentViewStep):
 
     
     def get(self, request):
-        params = self.all_need_params_in_session(request)
-        return render(request, self.template_name, params)
+        return self.render_page(request)
     
     def post(self, request):
         params = self.all_need_params_in_session(request)
 
-        appointment = Appointment.objects.create(
+        appointment, created = Appointment.objects.get_or_create(
             client=Client.objects.get(user=self.request.user),
             date=params['selected_date'],
             start_time=params['selected_start_time'],
@@ -401,12 +417,16 @@ class AppointmentViewStep4(BaseAppointmentViewStep):
             status='not_complete'
         )
 
-        for name in params['selected_services']:
-            service = Service.objects.get(name=name)
-            appointment.services.add(service)
+        if created:
+            for name in params['selected_services']:
+                service = Service.objects.get(name=name)
+                appointment.services.add(service)
 
-        appointment.save
-        return redirect('my_appointments')
+            appointment.save
+
+        return redirect('profile_user')
+        
+
 
     
 # страница для завершения регистрации
@@ -491,7 +511,12 @@ class RecoverPasswordStep2(FormView):
 
 
 
-
+@login_required
+def upload_picture(request):
+    if request.method == "POST" and request.FILES.get("picture_user"):
+        request.user.picture_user = request.FILES["picture_user"]
+        request.user.save()
+    return redirect("profile_user")
 
 
 

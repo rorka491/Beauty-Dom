@@ -8,18 +8,13 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 
-{% block steps %}
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step"></div>
-<div class="step"></div>
-{% endblock %}
-
 
 
 {% block form %}
 {% csrf_token %}
-{{ form }}
+<div class="flex-grow-1">
+    {{ form }}
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -50,10 +45,6 @@
             // Преобразуем дату в формат YYYY-MM-DD
             const date = dayElem.dateObj.toISOString().split('T')[0];
             
-            // Проверяем, что дата в availableDates, и она в том же формате
-            if (availableDates.some(d => d.trim() === date)) {
-                dayElem.style.textDecoration = "underline"; // Подчеркивание
-            }
         }
     });
 </script>

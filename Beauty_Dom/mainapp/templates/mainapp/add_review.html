@@ -15,7 +15,7 @@
 <div class="form-container">
     <form method="post" action="{% url 'add_review' %}">
         <div class="form-header">
-            <h1 class="form-title">{{ title }}</h1>
+            <h3 class="form-title">{{ title }}</h3>
             {% csrf_token %}
             <div class="star-rating">
                 <input type="radio" id="star5" name="rating" value="5">

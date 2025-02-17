@@ -1,0 +1,105 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>{{ title }}</title>
+{% endblock %}
+
+{% block extrastyles %} 
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/profile.css' %}" media="screen">
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated and not user.is_superuser %}
+<div class="container">
+    <div class="row mr-1">
+        <!-- Левая колонка с профилем -->
+        <div class="col-md-3">
+                <div class="card-body text-center">
+                    <h3>Профиль</h3>
+                    
+                    <form id="upload-form" method="post" action="{% url 'upload_picture' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="profile-picture">
+                            {% if user.picture_user %}
+                                <img id="profile-img" src="{{ user.picture_user.url }}" alt="Фото профиля"
+                                    class="rounded-circle" style="width: 130px; height: 130px; cursor: pointer;">
+                            {% else %}
+                                <img id="profile-img" src="{% static 'mainapp/images/Фавикон_логотип.jpg' %}" alt="Default Image"
+                                    class="rounded-circle" style="width: 130px; height: 130px; cursor: pointer;">
+                            {% endif %}
+                        </label>
+                        <input type="file" id="profile-picture" name="picture_user" accept="image/*" style="display: none;" onchange="document.getElementById('upload-form').submit();">
+                    </form>
+                    <!-- Данные пользователя -->
+                    <p><strong>{{ user.username }}</strong></p>
+                    <p class="text-muted">{{ user.email }}</p>
+
+
+                    <!-- Кнопки -->
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm w-100" onclick="return confirm('Вы уверены, что хотите выйти?')">Выйти</button>
+                    </form>
+                    <form method="post" action="{% url 'delete_account' %}" class="mt-2">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm w-100" onclick="return confirm('Вы уверены, что хотите удалить аккаунт?')">Удалить</button>
+                    </form>
+                </div>
+        </div>
+
+        <!-- Правая колонка под таблицу -->
+        <div class="col-md-9">
+            <h2 style="text-align: center;">Мои записи</h2>
+            {% if my_appointments %}
+            <div class="table-responsive w-100">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Цена</th>
+                            <th>Длительность</th>
+                            <th>Дата</th>
+                            <th>Время начала</th>
+                            <th>Время окончания</th>
+                            <th>Услуги</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in my_appointments %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'delete_appointment' appointment.id %}" 
+                                    class="btn btn-sm"
+                                    onclick="return confirm('Вы точно хотите отменить запись?');">
+                                    Отменить
+                                </a>
+                            </td>
+                            <td class="text-nowrap">{{ appointment.total_price }} &#x20BD;</td>
+                            <td class="text-nowrap">{{ appointment.total_time }}</td>
+                            <td class="text-nowrap">{{ appointment.date }}</td>
+                            <td class="text-nowrap">{{ appointment.start_time }}</td>
+                            <td class="text-nowrap">{{ appointment.end_time }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for service in appointment.services.all %}
+                                    <li>{{ service.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="appointment">
+                <p>У вас нет актуальных записей</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

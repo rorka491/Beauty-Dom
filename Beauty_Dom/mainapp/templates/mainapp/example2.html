@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Карусель с фото</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .carousel-timer {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+        }
+    
+        .carousel-timer .progress {
+            width: 0;
+            height: 100%;
+            background: #EFA3B0;
+            animation: progressAnimation 1s linear infinite;
+        }
+    
+        @keyframes progressAnimation {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+    </style>
+</head>
+
+<body class="">
+    <div class="container py-5">
+        <h2 class="text-center mb-4">Галерея</h2>
+
+        <div class="carousel-container">
+            <div id="photoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'mainapp\images\28954.jpg' %}" class="d-block w-100" alt="Фото 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'mainapp\images\34793.jpg' %}" class="d-block w-100" alt="Фото 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'mainapp\images\46361.jpg' %}" class="d-block w-100" alt="Фото 3">
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                <div class="carousel-timer">
+                    <div class="progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

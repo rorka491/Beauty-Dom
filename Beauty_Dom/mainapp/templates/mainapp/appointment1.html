@@ -3,34 +3,38 @@
 
 {% block url %}{% url 'appointment_step1' %}{% endblock url %}
 
-{% block steps %}
-<div class="step active"></div>
-<div class="step"></div>
-<div class="step"></div>
-<div class="step"></div>
-{% endblock %}
+
 
 {% block form %}
 {% csrf_token %}
-
-<div class="table-container"> 
-<table>
+<div class="flex-grow-1 table-container">
+<table class="table w-100">
     <tbody>
         {% for service in services %}
-        <tr>
+        <tr onclick="toggleRow(this, '{{ service.id }}')" class="service-row">
             <td>
-                <input type="checkbox" name="services" value="{{ service.id }}">
+                <input type="checkbox" name="services" value="{{ service.id }}" >
             </td>
             <td>{{ service.name }}</td>
             <td>{{ service.time }}</td>
-            <td>{{ service.price }}</td>
-            <td>&#x20BD;</td>
+            <td>{{ service.price }} &#x20BD;</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 </div>
 
+<script>
+    function toggleRow(row, id) {
+        let checkbox = row.querySelector('input[type="checkbox"]');
+        
+        // Переключаем состояние чекбокса
+        checkbox.checked = !checkbox.checked;
+        
+        // Добавляем или убираем класс 'selected' для подсветки строки
+        row.classList.toggle('selected', checkbox.checked);
+    }
+</script>
 {% endblock %}
 
 

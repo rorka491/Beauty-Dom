@@ -5,46 +5,71 @@
     <title>Запись на прием</title>
 {% endblock %}
 
+
 {% block extrastyles %} 
-<link rel="stylesheet" href="{% static 'mainapp/css/desktop/appointment.css' %}"/>
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/example.css' %}"/>
 {% block styles %} 
 {% endblock %}
 {% endblock %}
 
 
-
 {% block content %}
 {% if user.is_authenticated and not user.is_superuser %}
 
+
 {% if error_message %}
-{{ error_message }}
+    {% for message in error_messages %}
+    {{ message }}
+    {% endfor %}
 {% endif %}
 
-<form method="post" action="{% block url %}{% endblock url %}">
-    <div class="form-header">
-        <h1 class="form-title">Запись на прием</h1>
-        <div class="steps">
-            {% block steps %}
-            {% endblock %}
+<form method="post" action="{% block url %}{% endblock url %}" class="container p-3 d-flex flex-column">
+    <!-- Хедер -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-0">Запись на прием</h4>
+            <p class="text-muted">{{ step_text }}</p>
+        </div>
+
+        <!-- Шаги в хедере -->
+        <div class="steps-container d-flex gap-3 flex-nowrap d-none d-md-flex">
+            {% for i in "1234" %}
+                <div class="step {% if i|add:0 <= step_count %} active {% endif %} rounded-circle d-flex align-items-center justify-content-center"></div>
+            {% endfor %} 
         </div>
     </div>
+
 
     {% block form %}
 
     {% endblock %}
 
-    <div class="container">
-        <div class="row d-flex justify-content-between">
-            <div class="col-2">
-                <a href="{% url 'index' %}" style='text-decoration: none;' class="btn btn-left btn-main">Назад</a>
+    <!-- Блок кнопок с шагами внутри -->
+    <div class="btn-container d-flex align-items-center justify-content-between mt-3">
+        {% if step_count == 1 %}
+        <a class="btn btn-left btn-main" href="{% url 'index' %}">Назад</a>
+        {% elif step_count == 2 %}
+        <a class="btn btn-left btn-main" href="{% url 'appointment_step1' %}">Назад</a>
+        {% elif step_count == 3 %}
+        <a class="btn btn-left btn-main" href="{% url 'appointment_step2' %}">Назад</a>
+        {% elif step_count == 4 %}
+        <a class="btn btn-left btn-main" href="{% url 'appointment_step3' %}">Назад</a>
+        {% endif %}
 
-            </div>
-            <div class="col-2">
-                <button type="submit" class="btn btn-right btn-main text-white">Далее</button>
-            </div>
+
+
+        <div class="steps-container d-flex justify-content-center gap-2 flex-nowrap d-md-none">
+            {% for i in "1234" %}
+                <div class="step small {% if i|add:0 <= step_count %} active {% endif %} rounded-circle d-flex align-items-center justify-content-center"></div>
+            {% endfor %} 
         </div>
+
+        <button type="submit" class="btn btn-right btn-main text-white">Далее</button>
     </div>
 </form>
+
+
+
 
 {% else %}
     <p class="centered-text">Авторизуйтесь чтобы записаться на прием &#x2764;&#xFE0F;</p>
@@ -54,5 +79,3 @@
 {% endblock scripts %}
 
 {% endblock %}
-
-

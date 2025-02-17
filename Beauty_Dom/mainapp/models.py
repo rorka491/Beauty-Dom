@@ -4,7 +4,7 @@ from django.db.models import Avg
 from datetime import datetime, timedelta, time, date
 from Beauty_Dom.settings import BREAK_AFTER_WORK
 import uuid
-from . utils import IntervalHandler
+
 
 
 # Create your models here.
@@ -201,7 +201,6 @@ class BlogPostComment(models.Model):
 
 class Appointment(models.Model):
 
-
     class Meta: 
         verbose_name = 'Запись на прием'  # Измените на нужное название
         verbose_name_plural = 'Записи на прием'  # Измените на нужное множественное число
@@ -230,15 +229,6 @@ class Appointment(models.Model):
     
     display_services.short_description = 'Услуги'
 
-    @classmethod
-    def get_available_days(cls, duration_minutes, days_ahead=30):
-        """Возвращает все доступные дни для записи, используя IntervalHandler."""
-        return IntervalHandler.get_available_days(duration_minutes, cls, days_ahead)
-
-    @classmethod
-    def get_available_slots(cls, date, duration_minutes):
-        """Возвращает доступные слоты на определенную дату."""
-        return IntervalHandler.get_available_slots(date, duration_minutes, cls)
 
 
         

@@ -12,16 +12,75 @@
 
 
 {% block content %}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">О нас</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Блог</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                {% for profile in profiles %}
+                <div class="content-block">
+                        <div class="image-wrapper">
+                            <img src="{{ profile.image.url }}" class="image" alt="{{ profile.head }} - изображение">
+                        </div>
+                        <div class="description">
+                            <h1>{{ profile.head }}</h1>
+                            <p>{{ profile.text  }}</p>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <section id="services" class="py-2">
+                    <div class="container">
+                      <div class="row">
+                        {% for post in blog_posts %}
+                        <div class="col-md-4 mb-4">
+                          <div class="card">
+                            <!-- Карусель для изображений -->
+                            {% if post.photos.all %}
+                            <div id="carousel{{ post.id }}" class="carousel slide" data-bs-ride="false">
+                              <div class="carousel-inner">
+                                {% for photo in post.photos.all %}
+                                <div class="carousel-item image-container {% if forloop.first %}active{% endif %}">
+                                  <img src="{{ photo.photo.url }}" class="d-block w-100" alt="{{ photo.caption }}">
+                                </div>
+                                {% endfor %}
+                              </div>
+                              {% if post.photos.count > 1 %}
+                              <button class="carousel-control-prev text-dark" type="button" data-bs-target="#carousel{{ post.id }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next text-dark" type="button" data-bs-target="#carousel{{ post.id }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                              </button>
+                              {% endif %}
+                            </div>
+                            {% else %}
+                            <img src="{% static 'mainapp/images/photo_not_found.png' %}" class="card-img-top" alt="Default Image">
+                            {% endif %}
+                            
+                            <div class="card-body">
+                              <h5 class="card-title"> <a href="blog_post/{{ post.slug }}" style="color:#EFA3B0;">{{ post.title }}</a></h5>
+                              <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </section>
+            </div>
+    </div>    
 
-    {% for profile in profiles %}
-    <div class="content-block">
-        <div class="image-wrapper">
-            <img src="{{ profile.image.url }}" class="image" alt="{{ profile.head }} - изображение">
-        </div>
-        <div class="description">
-            <h1>{{ profile.head }}</h1>
-            <p>{{ profile.text  }}</p>
-        </div>
-    </div>
-    {% endfor %}
+    <!-- Подключаем Bootstrap JS и jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 {% endblock %}

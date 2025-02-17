@@ -17,6 +17,7 @@
 .container {
     max-width: 1200px; /* Ограничение по ширине на больших экранах */
     width: 100%; /* Заполнение на маленьких экранах */
+
 }
 
 .user-container h2 {
@@ -41,18 +42,19 @@
 
 .appointment {
     padding: 20px;
- 
     width: 100%;
     background-color: #ffffff;
 
     overflow-x: auto; 
 }
 
-.appointments-container{  
-    border: 3px solid #ff6ab25d;
-    border-radius: 10px;
-    background-color: #ffffff;
+
+
+.btn {
+    background-color: #B1CDE2; /* Цвет фона */
+    color: #ffffff;
 }
+
 
 th, td {
     padding: 10px;          
@@ -68,15 +70,24 @@ table {
 }
 
 
+.rounded-circle{
+    border: 3px solid #2321215d; 
+}
 
 
 
+.col-md-3 {
+    border: 3px solid #B1CDE2;
+    border-radius: 10px;
+}
 
 
-
-
-
-
+.col-md-9 {
+    border: 3px solid #B1CDE2;
+    border-radius: 10px;
+    padding-top: 10px;
+    background-color: #ffffff;
+}
 
 
 

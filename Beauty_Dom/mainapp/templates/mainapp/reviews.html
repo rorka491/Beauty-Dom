@@ -54,6 +54,8 @@
         <div class="review-button">
             <a href="{% url 'add_review' %}" class="btn btn-review text-white">+ Оставить отзыв</a>
         </div>
+    {% elif user.is_authenticated and user.is_superuser %}
+        
     {% else %}
         <div class="review-button">
             <a href="{% url 'login' %}" class="btn btn-review text-white">Авторизуйтесь чтобы оставить отзыв</a>

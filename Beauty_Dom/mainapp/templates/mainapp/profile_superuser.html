@@ -1,0 +1,45 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>{{ title }}</title>
+{% endblock %}
+
+{% block extrastyles %} 
+<link rel="stylesheet" href="{% static 'mainapp/css/desktop/profile.css' %}" media="screen">
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Левая колонка с профилем -->
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h3>Профиль</h3>
+                    
+                    <!-- Фото профиля -->
+                    {% if user.picture_user %}
+                        <img src="{{ user.picture_user.url }}" alt="Фото профиля" class="rounded-circle" style="width: 100px; height: 100px;">
+                    {% else %}
+                        <img src="{% static 'mainapp/images/default.jpg' %}" class="rounded-circle" alt="Default Image" style="width: 100px; height: 100px;">
+                    {% endif %}
+
+                    <!-- Данные пользователя -->
+                    <p><strong>{{ user.username }}</strong></p>
+                    <p class="text-muted">{{ user.email }}</p>
+
+                    <!-- Кнопки -->
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm w-100 col-3" onclick="return confirm('Вы уверены, что хотите выйти?')">Выйти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

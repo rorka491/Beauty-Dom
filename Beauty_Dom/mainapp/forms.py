@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 import uuid
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
 class ReviewForm(forms.ModelForm):
     class Meta:
@@ -80,7 +81,7 @@ class CustomerLoginForm(AuthenticationForm):
 # """Многоступенчатая форма"""
 
 class DateForm(forms.Form):
-    date = forms.DateField(label='',
+    date = forms.DateField(label='', error_messages={'required': ' Выберите день приема'},
         widget=forms.DateInput(
             attrs={
                 'type': 'text',
@@ -94,11 +95,8 @@ class StartTimeForm(forms.Form):
     start_time = forms.ChoiceField(
         label='', 
         choices=[],
-        widget=forms.Select(
-            attrs={
-                'id': 'timepicker',
-                'placeholder': 'Выберите время'
-            }
+        widget=forms.RadioSelect(
+            attrs={'class': 'radio-box'}
         )
     )
     

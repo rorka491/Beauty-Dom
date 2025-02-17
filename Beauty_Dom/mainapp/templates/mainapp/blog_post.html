@@ -67,7 +67,7 @@
             </div>
             {% endif %}
             {% else %}
-            <p>Вы не автор</p>
+            <p>Вы не авторизованы <a href="{% url 'login' %}">Войти</a> </p>
             {% endif %}
         </div>
     </div>

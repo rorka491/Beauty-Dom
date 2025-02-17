@@ -2,7 +2,7 @@
 .content-block {
     max-width: 800px;
     width: 95%;
-    height: 500px; /* Ширина карточки увеличена в два раза */
+    height: 500px; 
     background: linear-gradient(to left, #B1CDE2, #EFA3B0); /* Градиентная линия */ /* Градиент фона карточки */
     border-radius: 15px; /* Закругленные углы карточки */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для блока */
@@ -58,3 +58,32 @@
     height: 100vh; /* Высота области видимости */
 
 }
+.tab-content {
+    margin-top: 20px;
+}
+
+.nav-tabs {
+    border: none; /* Убираем бордеры у вкладок */
+}
+
+.nav-link {
+    border: none; /* Убираем бордеры у каждой вкладки */
+}
+
+
+.nav-tabs .nav-link.active {
+    border-bottom: 2px solid #ff69b4; /* Цвет подчеркивания активной вкладки */
+    color: #070808d6;
+
+}
+.nav-tabs .nav-link {
+    border-bottom: 2px solid transparent; /* Убирает линии у неактивных вкладок */
+    color:  #495057a8;
+    border: none;
+}
+
+.tab-pane {
+    display: grid;
+    place-items: center;
+}
+

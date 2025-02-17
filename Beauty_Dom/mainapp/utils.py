@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from datetime import timedelta, datetime, date, time
-from Beauty_Dom.settings import START_WORK, END_WORK, WORKDAY_DURATION, today, BREAK_AFTER_WORK, STEP
-from collections import defaultdict, namedtuple
+from Beauty_Dom.settings import START_WORK, END_WORK, BREAK_AFTER_WORK, STEP
+from rest_framework import serializers
 
 
 def send_activation_code(email, verification_link):
@@ -45,81 +45,6 @@ def str_list_to_datetime_list(str_list, fmt="%Y-%m-%d %H:%M"):
     return [[datetime.strptime(str_start, fmt), datetime.strptime(str_end, fmt)] for str_start, str_end  in str_list]
 
 
-
-def get_available_dates(selected_services):
-    from .models import Appointment, NotAvailaibleDates, Service
-    selected_services = Service.objects.filter(id__in=selected_services)
-    not_available_dates = [obj.date for obj in list(NotAvailaibleDates.objects.all())]
-    
-    # Суммируем время всех выбранных услуг
-    total_time = timedelta()
-    for service in selected_services:
-        total_time += service.time
-
-    # Если общее время превышает рабочий день, возвращаем пустой список доступных дат
-    if total_time > WORKDAY_DURATION:
-        return []
-
-    # Получаем текущую дату
-    today = date.today()
-
-    # Создаём список дат на 30 дней вперёд
-    future_dates = [
-        today + timedelta(days=i)
-        for i in range(1, 31)
-        if (today + timedelta(days=i)).weekday() < 5
-    ]
-
-    # Получаем записи с статусом 'not_complete' из базы данных
-    not_complete_appointments = Appointment.objects.filter(status='not_complete')
-
-    # Словарь для хранения занятых временных интервалов
-    occupied_slots = {}
-
-    # Заполняем занятые временные интервалы
-    for appointment in not_complete_appointments:
-        appointment_date = appointment.date
-        if appointment_date not in occupied_slots:
-            occupied_slots[appointment_date] = []
-        # Добавляем интервал в занятые слоты (начало и конец записи)
-        occupied_slots[appointment_date].append(
-            (appointment.start_time, appointment.end_time)
-        )
-
-    # Список доступных дат
-    available_dates = []
-
-    # Формируем доступные даты с учетом занятых временных слотов
-    for future_date in future_dates:
-        if future_date in not_available_dates:
-            continue  # Пропускаем заблокированные даты
-
-        future_start_time = datetime.combine(future_date, START_WORK)
-        future_end_time = future_start_time + total_time
-
-        while future_end_time <= datetime.combine(future_date, END_WORK):
-            is_available = True
-
-            for start_time, end_time in occupied_slots.get(future_date, []):
-                start_datetime = datetime.combine(future_date, start_time)
-                end_datetime = datetime.combine(future_date, end_time)
-
-                if future_end_time > start_datetime and future_start_time < end_datetime:
-                    is_available = False
-                    break
-
-            if is_available:
-                available_dates.append(future_date)
-                break  # Если нашли свободное окно, день доступен
-
-            future_start_time += timedelta(minutes=15)  # Двигаем время начала на 15 минут
-            future_end_time = future_start_time + total_time  # Обновляем время окончания
-
-    # Проверим, какие даты из доступных являются недоступными
-    common_dates = [date for date in available_dates if date not in not_available_dates]
-        
-    return [date.isoformat() for date in common_dates]
-
 def calculate_total_time(service_ids):
     from .models import Service
     """Рассчитывает общее время для выбранных услуг."""
@@ -157,85 +82,27 @@ def get_service_names(service_ids):
 
 
 
-def generate_time_slots(start_time, end_time, total_time=None):
-    # Преобразуем start_time и end_time в datetime
-    start = datetime.combine(datetime.today(), start_time)
-    if total_time:
-        end = datetime.combine(datetime.today(), end_time) - total_time
-    else:
-        end = datetime.combine(datetime.today(), end_time)
-    
-    time_slots = []
-    
-    current_time = start
-    while current_time <= end:
-        # Добавляем только время в список
-        time_slots.append(current_time.time().strftime('%H:%M'))
-        current_time += timedelta(minutes=15)
-    
-    return time_slots
-
-def get_available_start_time(selected_date, total_time):
-    from .models import Appointment
-    time_list = generate_time_slots(START_WORK, END_WORK, total_time) 
-    print(time_list)
-
-    all_appointment_in_selected_date = Appointment.objects.filter(date=selected_date)
-    print(all_appointment_in_selected_date)
-
-    if not all_appointment_in_selected_date:
-        return time_list
-    
-    # Список занятых временных интервалов
-    occupied_slots = []
-    selected_date_date_obj = datetime.strptime(selected_date, "%Y-%m-%d").date()
-    for appointment in all_appointment_in_selected_date:
-        start_time = appointment.start_time  # Время начала записи
-        end_time = appointment.end_time  # Время окончания записи
-
-        # Преобразуем время начала и окончания в datetime
-        start_datetime = datetime.combine(selected_date_date_obj, start_time)
-        end_datetime = datetime.combine(selected_date_date_obj, end_time)
-
-        occupied_slots.append((start_datetime, end_datetime))
-
-    not_available_dates = []
-
-    # Проходим по каждому занятым интервалам и исключаем занятые слоты из доступных
-    for start, end in datetime_list_to_str_list(occupied_slots):
-        # Преобразуем строки времени обратно в объекты времени
-        start_time = datetime.strptime(start, "%Y-%m-%d %H:%M").time()
-        end_time = datetime.strptime(end, "%Y-%m-%d %H:%M").time()
-        # Генерация временных интервалов для текущего занятый интервала
-        slots = generate_time_slots(start_time, end_time)
-
-        not_available_dates.extend(slots)
-
-    return [item for item in time_list if item not in not_available_dates] 
-
-
-
-    
 
 
 class BaseClassTime:
     def _add_time(self, t: time, delta: timedelta) -> time:
-        """Складывает time и timedelta без обработки перехода через полночь."""
+        """Складывает time и timedelta"""
         return (datetime(1, 1, 1, t.hour, t.minute, t.second) + delta).time()
     
     def _diff_time(self, delta: timedelta, t=END_WORK) -> time:
         return (datetime(1, 1, 1, t.hour, t.minute, t.second) - delta).time()
         
-    def _subtract_time_slots(self, large_list, small_list):
+    def _subtract_time_slots(self, all_slots, busy_slots):
         """Удаляет элементы из большого списка, которые есть в меньшем."""
-        return [slot for slot in large_list if slot not in small_list]
+        return [slot for slot in all_slots if slot not in busy_slots]
 
-    def _create_time_slots(self, time_duration=None, start_work=START_WORK, end_work=END_WORK, step=STEP):
+    def _create_time_slots(self, time_duration=None, start_work=START_WORK, end_work=END_WORK, step=STEP) -> list:
         time_slots = []
         current_time = start_work
 
         if time_duration:
             end_work = self._diff_time(time_duration)
+        
 
         while current_time <= end_work:
             time_slots.append(current_time)
@@ -248,67 +115,189 @@ class Interval(BaseClassTime):
     def __init__(self, start_time, end_time):
         self.start_time = start_time
         self.end_time = end_time
+        self.end_time_after_break = self._set_time_after_break()
+        self.time_slots = self._get_interval_slots()
 
+    def _set_time_after_break(self, break_after_work=BREAK_AFTER_WORK):
+        """Устанавливает время после перерыва"""
+        return self._add_time(self.end_time, break_after_work)
 
-    def _get_interval_slots(self, step=STEP):
+    def _get_interval_slots(self, step=STEP) -> list:
         """Возвращает список временных слотов, используя параметры объекта (start_time, end_time) и метод из базового класса."""
-        return self._create_time_slots(start_work=self.start_time, end_work=self.end_time, step=step,)
-    
+        return self._create_time_slots(start_work=self.start_time, end_work=self.end_time_after_break, step=step)[:-1]
+
+
 
 class Day(BaseClassTime):
     def __init__(self, date: date, time_duration: timedelta):
-        self.date = date
-        self.buzi_intervals = self._set_time_intervals()
-        self.start_slots = self.get_start_time_list(time_duration)
+        self._date = date
+        self._busy_intervals = self._set_time_intervals()
+        self._busy_time_slots = self._set_busy_time_slots()
+        self._start_slots = self._create_start_time_list(time_duration)
+        self.is_available = self.get_start_time_list() is not None
 
     def _set_time_intervals(self):
         """Получаем интервалы на основе данных из модели Appointment для данной даты."""
         from .models import Appointment
-        appointments = Appointment.objects.filter(date=self.date, status='not_complete')
+        appointments = Appointment.objects.filter(date=self._date, status='not_complete')
         interval_list = []
 
         for appointment in appointments:
-            interval_list.append(Interval(appointment.start_time, appointment.end_time_after_break))
+            interval_list.append(Interval(appointment.start_time, appointment.end_time))
 
         return interval_list
 
-    def return_free_time_slots(self):
+    def _set_busy_time_slots(self):
+        busy_time_slots = []
+
+        for interval in self._busy_intervals:
+            busy_time_slots += interval.time_slots
+        print(busy_time_slots)
+        return busy_time_slots
+
+
+    def _return_free_time_slots(self, all_day_time_slots=None):
         """Удаляет элементы из большого списка, которые есть в одном или нескольких малых списках."""
-        all_day_time_slots = self._create_time_slots()  # Вызываем метод из BaseClassTime напрямую
+        if all_day_time_slots is None:
+            all_day_time_slots = self._create_time_slots()
 
         time_slots = []
-        for interval in self.intervals:
+        for interval in self._busy_intervals:
             time_slots.extend(interval._get_interval_slots())
 
 
         return self._subtract_time_slots(all_day_time_slots, time_slots)
+
     
-    def get_start_time_list(self, time_duration: timedelta):
+    def _create_start_time_list(self, time_duration: timedelta):
+        """Возвращает список доступных для начала процедыр дат"""
         all_day_time_slots_diff_dur = self._create_time_slots(time_duration=time_duration)
         
-        free_time_slots = self.return_free_time_slots(all_day_time_slots_diff_dur)
-        free_time_slots_add_dur = []
-        
-        for slot in free_time_slots:
-            free_time_slots_add_dur.append(self._add_time(slot, time_duration))
+        free_time_slots = self._return_free_time_slots(all_day_time_slots_diff_dur)
+        free_time_slots_add_dur = [self._add_time(slot, time_duration) for slot in free_time_slots]
 
         time_slots = []
-        for interval in self.buzi_intervals:
+        for interval in self._busy_intervals:
             time_slots.extend(interval._get_interval_slots())
 
         result = [self._diff_time(time_duration, slot) for slot in self._subtract_time_slots(free_time_slots_add_dur, time_slots)]
+
         if not result:
-            return 'not_available_times'
+            return None
+        
         return result
+    
+    def checkout_intervals_croses(self, interval):
+        time_slots = set(interval._get_interval_slots())
+
+        if time_slots in self._busy_time_slots:
+            return True 
+
+        return False
+
+
+    def get_date(self):
+        return self._date
+    
+    def get_date_str(self):
+        return self._date.strftime('%Y-%m-%d') 
+    
+    def get_start_time_list(self):
+        return self._start_slots
+
+    def get_start_time_list_str(self):
+        return [slot.strftime('%H:%M') for slot in self._start_slots]
+
+    
 
     @classmethod
     def create_some_days(cls, count, time_duration: timedelta):
         """Создает n дней начиная с завтрашнего дня."""
         current_date = datetime.now().date() + timedelta(days=1)  # Завтрашняя дата
         days = []
+        forbiden_dates = cls._create_forbiden_list_days()
 
-        for i in range(count):
-            new_date = current_date + timedelta(days=i)
-            days.append(cls(new_date, time_duration))  # Создание нового объекта Day для каждого дня
-
+        while len(days) < count:
+            if current_date not in forbiden_dates and current_date.weekday() not in [5, 6]:
+                days.append(cls(current_date, time_duration))
+            current_date += timedelta(days=1)
         return days
+    
+    @classmethod
+    def _create_forbiden_list_days(cls):
+        '''Создает список запрещеных дат для бронирования'''
+        from .models import NotAvailaibleDates
+        forbiden_dates = NotAvailaibleDates.objects.all()
+        
+        return [date.date for date in forbiden_dates]
+
+    
+    @classmethod 
+    def create_available_list_days(cls, count, time_duration: timedelta) -> list:
+        """Возвращает список и словарь вида 
+        [date1, date2, date3] - нужно для 2 этапа формы
+        {date1: [time_slot1, time_slot1], date2: [time_slot1, time_slot1]  } - нужно для 3 этапа формы
+        для доступных дат на count дней вперед"""
+        days_list = cls.create_some_days(count=count, time_duration=time_duration)
+
+        available_dates_times = {}
+        available_dates = []
+
+        for day in days_list:
+            if day.is_available:
+                available_dates.append(day.get_date_str())
+                available_dates_times[day.get_date_str()] = day.get_start_time_list_str()
+
+        return available_dates, available_dates_times
+    
+
+class IntervalSerializator(serializers.Serializer):
+    start_time = serializers.TimeField(format="%H:%M")
+    end_time = serializers.TimeField(format="%H:%M")
+    end_time_after_break = serializers.TimeField(format="%H:%M")
+
+    def to_representation(self, instance):
+        return {
+            'start_time': str(instance.start_time),
+            'end_time': str(instance.end_time),
+            'end_time_after_break': str(instance.end_time_after_break)
+        }
+
+class DaySerialazable(serializers.Serializer):
+    date = serializers.DateField(source='_date')
+    busy_intervals = IntervalSerializator(source='_busy_intervals', many=True)  # Список объектов Interval
+    busy_time_slots = serializers.ListField(source='_busy_time_slots', child=serializers.TimeField(format="%H:%M"))
+    start_slots = serializers.ListField(child=serializers.TimeField(format="%H:%M"))
+    is_available = serializers.BooleanField()
+
+
+def make_appointment(request, params, selected_date):
+    """Функция для создания записи проверяет нет ли уже такой записи 
+    и проверяет не пересикается ли запись с кемто еще"""
+    from .models import Appointment, Client, Service
+
+
+    
+    appointment, created = Appointment.objects.get_or_create(
+        client=Client.objects.get(user=request.user),
+        date=params['selected_date'],
+        start_time=params['selected_start_time'],
+        end_time=params['end_time'],
+        end_time_after_break=params['end_time_after_break'],
+        total_price = params['total_price'],
+        total_time = params['total_time'],
+        status='not_complete'
+    )
+
+    if created:
+        for name in params['selected_services']:
+            service = Service.objects.get(name=name)
+            appointment.services.add(service)
+
+        appointment.save
+
+
+# def get_available_dates(selected_date):
+
+
+# def get_available_start_time(selected_date):

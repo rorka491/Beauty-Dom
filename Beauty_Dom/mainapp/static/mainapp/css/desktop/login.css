@@ -14,7 +14,7 @@ body {
     border-radius: 10px;
     max-width: 500px;
     border: 2px solid #EFA3B0;
-    width: 90%;
+    width: 95%;
 }
 
 h1 {
@@ -44,7 +44,7 @@ button {
     border-radius: 5px !important;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px;
+
 }
 
 button:hover {
@@ -79,7 +79,3 @@ h2 {
     font-weight: 300; /* Чем меньше значение, тем тоньше текст */
 }
 
-.container, .row {
-    padding: 0; /* Убираем внутренние отступы */
-    margin: 0;  /* Убираем внешние отступы */
-}
