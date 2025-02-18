@@ -138,7 +138,7 @@ class Reviews(ListView):
         context['total_rating'] = SiteRating.objects.first().total_rating
         context['total_reviews'] = SiteRating.objects.first().total_reviews
         return context
-    
+
 # страница для добавления отзыва
 class AddReview(FormView):
     form_class = ReviewForm
