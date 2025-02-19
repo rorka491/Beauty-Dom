@@ -14,7 +14,7 @@
 
 
 {% block content %}
-{% if user.is_authenticated and not user.is_superuser %}
+
 
 
 {% if error_message %}
@@ -63,17 +63,18 @@
                 <div class="step small {% if i|add:0 <= step_count %} active {% endif %} rounded-circle d-flex align-items-center justify-content-center"></div>
             {% endfor %} 
         </div>
-
+        {% if user.is_authenticated %}
         <button type="submit" class="btn btn-right btn-main text-white">Далее</button>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-right btn-main text-white">Далее</a>
+        {% endif %}
+
     </div>
 </form>
 
 
 
 
-{% else %}
-    <p class="centered-text">Авторизуйтесь чтобы записаться на прием &#x2764;&#xFE0F;</p>
-{% endif %}
 
 {% block scripts %}
 {% endblock scripts %}

@@ -131,6 +131,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'mainapp/static'),  # Статика приложения mainapp
@@ -152,7 +154,7 @@ LANGUAGE_CODE = 'ru'
 SMSRU_API_KEY = '7FDFD7A6-FA50-D496-B2C3-CE8C7C998832'
 
 MEDIA_URL = '/media/'  # URL для доступа к загруженным файлам
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # Папка для загружаемых файлов
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Папка для загружаемых файлов
 
 LOGOUT_REDIRECT_URL = '/'  # Перенаправление на главную страницу
 

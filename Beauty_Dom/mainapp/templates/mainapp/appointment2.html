@@ -8,8 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 
-
-
 {% block form %}
 {% csrf_token %}
 <div class="flex-grow-1">
@@ -49,7 +47,7 @@
     });
 </script>
 <script>
-    document.getElementById("datepicker").placeholder = "Выберите дату              📅";
+    document.getElementById("datepicker").placeholder = "Выберите дату";
 </script>
 {% endblock scripts %}
 

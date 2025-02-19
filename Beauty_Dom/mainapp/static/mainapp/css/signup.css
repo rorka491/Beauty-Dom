@@ -67,16 +67,16 @@ a:hover {
 }
 
 .logo-container {
-    text-align: center; /* Центрирует содержимое внутри контейнера */
-    margin-bottom: 20px; /* Добавляет отступ снизу для разделения с формой */
+    text-align: center; 
+    margin-bottom: 20px;
 }
 
 .logo-container img {
-    max-width: 100%; /* Уменьшает размер изображения, если оно превышает ширину контейнера */
-    height: auto; /* Сохраняет пропорции изображения */
+    max-width: 100%; 
+    height: auto; 
 }
 
 h2 {
-    font-weight: 300; /* Чем меньше значение, тем тоньше текст */
+    font-weight: 300;
 }
 

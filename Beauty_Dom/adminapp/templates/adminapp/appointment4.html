@@ -1,7 +1,7 @@
-{% extends 'adminapp/appointment_base.html' %}
+{% extends 'mainapp/appointment_base.html' %}
 {% load static %}
 
-{% block url %}{% url 'form_step4' %}{% endblock url %}
+{% block url %}{% url 'form_step5' %}{% endblock url %}
 
 {% block steps %}
 <div class="steps">
@@ -9,11 +9,16 @@
     <div class="step active"></div>
     <div class="step active"></div>
     <div class="step active"></div>
-    <div class="step"></div>
+    <div class="step active"></div>
 </div>
 {% endblock steps %}
 
 {% block form %}
 {% csrf_token %}
-{{ form }}
+{{ selected_start_time }}
+{{ end_time }}
+{{ selected_date }}
+{{ selected_services }}
+{{ total_time }}
+{{ total_price }}
 {% endblock form %}

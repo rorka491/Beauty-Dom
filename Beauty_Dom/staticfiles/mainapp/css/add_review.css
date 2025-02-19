@@ -1,0 +1,120 @@
+textarea {
+    resize: none; /* Запрещает изменение размера */
+    width: 60%; /* Ширина 100% от родительского элемента */
+    height: 150px; /* Высота в пикселях */
+}
+
+.form-header-container {
+    text-align: center;
+    padding-left: 10px;
+}
+
+.form-title {
+    white-space: nowrap;  /* Отключает перенос строки */
+    text-align: left;  
+}
+
+.form-container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.form-header {
+    display: flex;
+    text-align: center;
+    color: #272727f4;
+    font-weight: 50;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Стиль формы */
+form {
+    width: 100%;
+    max-width: 800px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    margin: 50px auto; /* Добавляем отступы сверху и снизу */
+    border: 2px solid #EFA3B0;
+}
+
+/* Стиль для полей ввода */
+.form-group {
+    margin-bottom: 15px;
+    border: 2px solid #3333336d;
+    border-radius: 5px;
+}
+
+
+/* Стиль для кнопки */
+.btn-primary {
+    display: block;
+    width: 150px;
+    padding: 10px 20px;
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to left, #A0BDD4, #D9929F);
+}
+
+
+textarea {
+    resize: none;
+    width: 100%;
+    height: 150px;
+    
+}
+
+.star-rating {
+    display: flex;
+    font-size: 2rem; /* Размер звездочек */
+    direction: rtl; /* Направление слева направо */
+    align-items: center; /* Центрирование по вертикали */
+}
+
+.star-rating input {
+    display: none; /* Скрыть стандартные радиокнопки */
+}
+
+.star-rating label {
+    color: #ddd; /* Цвет незаполненной звезды */
+    cursor: pointer;
+    font-size: 2rem; /* Размер звездочек */
+    margin: 0; /* Удалить отступы */
+    position: relative;
+}
+
+/* Заполнение звездочек от первой до выбранной */
+.star-rating input:checked ~ label {
+    color: #f5b301; /* Цвет заполненной звезды */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f5b301; /* Цвет при наведении */
+}
+
+/* Заполнение звездочек при наведении и удерживании */
+.star-rating input:checked ~ input ~ label {
+    color: #f5b301; /* Цвет заполненной звезды */
+}
+
+/* Для правильного отображения выбранной звезды */
+.star-rating input:checked ~ label,
+.star-rating input:checked ~ input ~ label {
+    color: #f5b301; /* Цвет заполненной звезды */
+}
+

@@ -1,0 +1,22 @@
+.image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Пропорция 4:3, можно настроить под свои нужды */
+    overflow: hidden;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сохраняет пропорции изображения, заполняя контейнер */
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: black;
+}
+

@@ -3,7 +3,6 @@ from .models import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
-import uuid
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 

@@ -1,0 +1,137 @@
+.step {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #00000055;
+    background-color: #ffffff;
+}
+
+.step.small {
+    height: 15px;
+    width: 15px;
+}
+
+form.container {
+    max-width: 800px;
+    width: 95%;
+    height: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #EFA3B0;
+    border-radius: 15px;
+}
+
+.table-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* Вертикальная прокрутка, если содержимое превышает высоту */
+    overflow-x: auto; /* Горизонтальная прокрутка при необходимости */
+}
+
+table {
+    border-collapse: collapse;
+    font-weight: 100;
+    font: 100;
+}
+
+
+
+.step.active {
+    background-color: #B1CDE2;/* Текущий шаг */
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.btn-right {
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    border: 2px solid #ffffff; /* Обводка */
+    color: #fff;
+
+}
+
+.btn-left {
+    border: 1px solid #00000017; /* Обводка */
+}
+
+.flex-grow-1 {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.radio-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-height: 100%;
+
+}
+
+.radio-box {
+    width: 80px;
+    height: 40px;
+    border: 2px solid  #00000017;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.radio-box input[type="radio"] {
+    display: none;
+}
+
+.radio-box input[type="radio"]:checked ~ label,
+.radio-box:hover {
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    border-radius: 8px;
+    color: #fff;
+}
+
+.radio-box label {
+    font-weight: 100;
+    font: 100;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.centered-text {
+    position: absolute; /* Позволяет расположить элемент относительно ближайшего позиционированного родителя */
+    top: 50%; /* Сдвигаем вниз на 50% высоты экрана */
+    left: 50%; /* Сдвигаем вправо на 50% ширины экрана */
+    transform: translate(-50%, -50%); /* Центрируем элемент */
+    text-align: center; /* Выравнивание текста по центру */
+    font-size: 24px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+    width: 100hv;
+    height: 100hv;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 30 px;
+    border-color: #000000;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.8); /* Увеличивает чекбокс в 1.5 раза */
+}
+
+
+.table-hover tbody tr {
+    cursor: pointer;
+}
+
+.service-row.selected {
+    background-color: #b1cde2 !important;
+}
+
+/* Эффект наведения */
+.service-row:hover {
+    background-color: #f0f0f0;  /* Легкая подсветка при наведении */
+}

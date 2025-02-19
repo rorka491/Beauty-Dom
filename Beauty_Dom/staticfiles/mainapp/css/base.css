@@ -1,0 +1,227 @@
+/* Основные стили для body */
+html, body {
+    height: 100%; /* Убедитесь, что html и body занимают всю высоту */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* Цвет фона страницы */
+    color: #333; /* Цвет текста по умолчанию */
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для header */
+header {
+    background-color: white; /* Белый фон для header */
+    min-height: 50px; /* Минимальная высота header */
+    
+    position: relative;
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: space-between; /* Раздвигает элементы по краям */ 
+    font-size: 16px;
+    width: 100%;
+    position: fixed;
+    z-index: 9998;
+}
+
+
+.logo {
+    position: absolute; /* Логотип не будет влиять на поток */
+    z-index: 9999;
+}
+
+
+header::after {
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Страница занимает всю высоту окна браузера */
+}
+
+.content {
+    /* Центрирование контента */
+    display: flex; /* Используем flexbox */
+    flex-direction: column; /* Вертикальная ориентация */
+    align-items: center; /* Центрирование по горизонтали */
+    justify-content: center; /* Центрирование по вертикали */
+
+    /* Убедись, что у контейнера есть фиксированная высота или min-height */
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+header::after {
+    content: ""; /* Псевдоэлемент для линии */
+    position: absolute;
+    bottom: -2px; /* Линия располагается под header */
+    left: 0;
+    width: 100%;
+    height: 2px; /* Высота линии */
+}
+
+/* Стили для навигационного меню */
+nav ul {
+    list-style: none; /* Удаление маркеров списка */
+    display: flex; /* Flexbox для горизонтального расположения элементов */
+    justify-content: center; /* Центрирование элементов по горизонтали */
+    padding: auto;
+    margin: auto;
+}
+
+nav ul li {
+    margin: 0 20px; /* Отступы между элементами меню */
+}
+
+nav ul li a {
+    text-decoration: none; /* Удаление подчеркивания у ссылок */
+    color: #000000; /* Цвет текста ссылок */
+    font-weight: 500; /* Толщина шрифта */
+    transition: color 0.3s ease; /* Плавный переход цвета при наведении */
+}
+
+nav ul li a:hover {
+    color: #ff69b4; /* Розовый цвет для активных и наведеных ссылок */
+}
+
+nav ul li a.active {
+    border-bottom: 2px solid #ff69b4 !important;
+    padding-bottom: 2px !important; 
+}
+
+nav ul li button {
+    background: none; /* Убирает фон кнопки */
+    border: none; /* Убирает рамку */
+    color: #000000; /* Цвет текста кнопки */
+    font-weight: 500; /* Толщина шрифта */
+    text-align: left; /* Выравнивание текста, как у ссылки */
+    padding: 0; /* Убирает внутренние отступы */
+    transition: color 0.3s ease; /* Плавный переход цвета при наведении */
+}
+
+nav ul li button:hover {
+    color: #ff69b4; /* Розовый цвет при наведении */
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Стили для кнопок */
+button {
+    background-color: #ffffff; /* Цвет фона кнопок */
+    color: #000000; /* Цвет текста кнопок */
+    border: none; /* Удаление границы у кнопок */
+    padding: 10px 20px; /* Отступы внутри кнопок */
+    cursor: pointer; /* Курсор руки при наведении */
+    font-family: 'Raleway', sans-serif; /* Шрифт для кнопок */
+    transition: background-color 0.3s ease; /* Плавный переход фона кнопок при наведении */
+}
+
+
+html {
+    overflow-y: scroll;
+}
+
+/* Основные стили для футера */
+.site-footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    margin-top: auto;
+    flex: 0 0 auto;
+}
+
+.site-footer::before {
+    content: "";
+    display: block;
+    height: 2px; /* высота разделительной линии */
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0); /* Градиентная линия */
+    width: 100%;
+    position: absolute;
+    top: -2px; /* чтобы линия появилась над футером */
+    left: 0;
+}
+
+.site-footer .container {
+    max-width: 100%;
+}
+
+.site-footer .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.site-footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.site-footer .footer-links li {
+    display: inline;
+}
+
+.site-footer .footer-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.site-footer .footer-links a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.btn-right {
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    border: 2px solid #ffffff; /* Обводка */
+    color: #fff;
+
+}
+
+.btn-left {
+    border: 1px solid #00000017; /* Обводка */
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Пропорция 1:1 (квадрат) */
+    overflow: hidden;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Сохраняет пропорции изображения и оставляет пустое пространство по бокам или сверху/снизу */
+}
+
+a {
+    color: #EFA3B0;
+    text-decoration: none; /* Убирает подчеркивание */
+}
+
+a:hover {
+    color: #D77A89; /* Цвет при наведении */
+}
+
+a:active {
+    color: #C45B6A; /* Цвет при клике */
+}

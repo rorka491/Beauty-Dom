@@ -1,0 +1,100 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.form-header-container {
+    text-align: center;
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    color: rgba(44, 44, 44, 0.79);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Стиль формы */
+form {
+    width: 800px;
+    max-width: 100%; /* Для адаптивности */
+    height: auto; /* Убрал фиксированную высоту */
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #EFA3B0;
+    overflow: hidden;
+}
+
+/* Центрирование текста */
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    width: 100vw; /* Исправлено с hv на vw */
+    height: 100vh; /* Исправлено с hv на vh */
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 30px; /* Исправлен синтаксис */
+    border: 1px solid #000;
+}
+
+/* Кнопки */
+.btn-main {
+    display: inline-block;
+    width: 80px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 550;
+    padding: 8px 12px;
+}
+
+.btn-right {
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);
+    color: #fff;
+}
+
+.btn-left {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Таблицы */
+.table-container {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.table-container::-webkit-scrollbar {
+    display: none;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.content {
+    /* Центрирование контента */
+    display: flex; /* Используем flexbox */
+    flex-direction: column; /* Вертикальная ориентация */
+    align-items: center; /* Центрирование по горизонтали */
+    justify-content: center; /* Центрирование по вертикали */
+
+    /* Убедись, что у контейнера есть фиксированная высота или min-height */
+    min-height: 80vh; /* Минимальная высота 80% от высоты окна */
+    margin-top: 80px;
+}

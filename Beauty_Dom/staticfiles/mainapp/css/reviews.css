@@ -1,0 +1,164 @@
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    box-sizing: border-box; /* Чтобы отступы не выходили за пределы */
+}
+
+.review-block {
+    max-width: 550px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    border: 2px solid #ff6ab25d;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    color: #000000;
+}
+
+.review-header strong {
+    text-align: left;
+}
+
+.review-header span {
+    text-align: right;
+}
+
+.form-header {
+    display: inline-block;
+    font-weight: 300;
+    text-align: center;
+    color: #000000c0; /* Цвет текста */
+    background-color: #ffffff; /* Белый фон */
+    padding: 10px 10px; /* Отступы внутри прямоугольника */
+    border-radius: 15px; /* Закругленные края */
+    margin: 10px; 
+}
+
+.review-content {
+    background-color: #ffffff;
+    width: 100%;
+    font-size: 16px;
+    text-align: left;
+}
+
+.review-footer {
+    font-size: 0.9em;
+    color: #000000;
+    width: 100%;
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+    
+}
+
+.review-divider {
+    border: none !important;
+    border-top: 1px solid #0000002f !important;
+    margin: 10px 0 !important;
+}
+
+
+.star {
+    color: #cccccc; /* Цвет неактивных звезд */
+    
+}
+
+.star.filled {
+    color: #f39c12; /* Цвет активных звезд */
+}
+
+.review-button {
+    position: fixed;
+    top: 80px;
+    right: 20px; /* Отступ от правого края */
+    z-index: 1000; /* Убедитесь, что кнопка выше других элементов */
+}
+
+.btn-review {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0);/* Цвет фона */
+    color: white; /* Цвет текста */
+    text-align: center;
+    text-decoration: none; /* Убирает подчеркивание текста */
+    border-radius: 15px; /* Закругленные края */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень под кнопкой */
+    font-weight: bold; /* Жирный текст */
+}
+
+.btn-review:hover {
+    background-color: #ffffff4d; /* Изменение цвета фона при наведении */
+}
+
+
+.review-header strong,
+.review-header span,
+.review-content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.review-header strong {
+    max-width: 70%; /* Ограничение ширины */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляет троеточие, если текст слишком длинный */
+    white-space: nowrap; /* Запрещает перенос текста на новую строку */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    padding: 10px 15px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #a5cae7;
+    border: 1px solid #00000093;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+    color: #EFA3B0;
+}
+
+.pagination span {
+    margin: 0 10px;
+}
+
+.centered-text {
+    position: absolute; /* Позволяет расположить элемент относительно ближайшего позиционированного родителя */
+    top: 50%; /* Сдвигаем вниз на 50% высоты экрана */
+    left: 50%; /* Сдвигаем вправо на 50% ширины экрана */
+    transform: translate(-50%, -50%); /* Центрируем элемент */
+    text-align: center; /* Выравнивание текста по центру */
+    font-size: 24px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+    width: 100hv;
+    height: 100hv;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 30 px;
+    border-color: #000000;
+}

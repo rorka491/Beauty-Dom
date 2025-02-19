@@ -19,5 +19,3 @@ if settings.DEBUG:
 
 
 
-
-

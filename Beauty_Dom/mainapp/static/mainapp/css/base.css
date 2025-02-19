@@ -190,7 +190,6 @@ html {
     background: linear-gradient(to left, #B1CDE2, #EFA3B0);
     border: 2px solid #ffffff; /* Обводка */
     color: #fff;
-
 }
 
 .btn-left {
@@ -225,3 +224,4 @@ a:hover {
 a:active {
     color: #C45B6A; /* Цвет при клике */
 }
+

@@ -1,18 +1,14 @@
-{% extends 'adminapp/appointment_base.html' %}
+{% extends 'mainapp/appointment_base.html' %}
 {% load static %}
 
-{% block url %}{% url 'form_step3' %}{% endblock url %}
-
-{%  block extrastyles %} 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-{% endblock %}
+{% block url %}{% url 'form_step4' %}{% endblock url %}
 
 {% block steps %}
 <div class="steps">
     <div class="step active"></div>
     <div class="step active"></div>
     <div class="step active"></div>
-    <div class="step"></div>
+    <div class="step active"></div>
     <div class="step"></div>
 </div>
 {% endblock steps %}
@@ -21,43 +17,3 @@
 {% csrf_token %}
 {{ form }}
 {% endblock form %}
-
-{% block scripts %}
-<!-- Подключите сам flatpickr -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<!-- Подключите локализацию для русского языка -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/l10n/ru.js"></script>
-
-<script type="module">
-
-
-    // Передаем список дат как массив в JavaScript
-    const availableDates = JSON.parse("{{ available_dates|safe }}".replace(/'/g, '"'));
-    const minDate = "{{ available_dates|first }}";
-    const maxDate = "{{ available_dates|last }}"
-
-    flatpickr("#datepicker", {
-        enable: availableDates, // Доступные даты
-        minDate: minDate, 
-        maxDate: maxDate,
-        dateFormat: "Y-m-d", // Устанавливаем формат даты для flatpickr
-        locale: {
-            ...flatpickr.l10ns.ru,
-            firstDayOfWeek: 1,
-        },
-        onDayCreate: function(dObj, dStr, fp, dayElem) {
-        // Преобразуем дату в формат YYYY-MM-DD
-        const date = dayElem.dateObj.toISOString().split('T')[0];
-
-        // Проверяем, что дата в availableDates, и она в том же формате
-        if (availableDates.some(d => d.trim() === date)) {
-            dayElem.style.textDecoration = "underline"; // Подчеркивание
-        }
-        }
-    });
-</script>
-<script>
-    document.getElementById("datepicker").placeholder = "Выберите дату              📅";
-</script>
-{% endblock scripts %}

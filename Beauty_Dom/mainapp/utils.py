@@ -152,7 +152,6 @@ class Day(BaseClassTime):
 
         for interval in self._busy_intervals:
             busy_time_slots += interval.time_slots
-        print(busy_time_slots)
         return busy_time_slots
 
 

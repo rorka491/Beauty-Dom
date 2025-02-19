@@ -1,3 +1,4 @@
+{% extends 'mainapp/base.html' %}
 {% load static %}
 
 {%  block extrastyles %} 
@@ -6,14 +7,7 @@
 {% endblock %}
 
 
-<!DOCTYPE html>
-<html lang="ru" translate="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-</head>
-<body>
+{% block content %}
     <div class="divform">
         <div class="logo-container">
             <a href="{% url 'index' %}">
@@ -38,11 +32,13 @@
                     </div>
                     {% endfor %}
                 </div>
-                <button class="col-12" type="submit">Войти</button>
+                <button class="button-submit" type="submit">Войти</button>
             </div>
         </form>
-        <p>Нет аккаунта? <a href="{% url 'signup' %}">Регистрация</a></p>
-        <p><a href="{% url 'recover_password1' %}">Забыли пароль</a></p>
+        <div class="links">
+            <p>Нет аккаунта? <a href="{% url 'signup' %}">Регистрация</a></p>
+            <p><a href="{% url 'recover_password1' %}">Забыли пароль</a></p>
+        </div>
+
     </div>
-</body>
-</html>
+{% endblock %}

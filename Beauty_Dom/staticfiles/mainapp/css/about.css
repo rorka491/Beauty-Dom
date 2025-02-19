@@ -1,0 +1,89 @@
+/* Стили для карточки */
+.content-block {
+    max-width: 800px;
+    width: 95%;
+    height: 500px; 
+    background: linear-gradient(to left, #B1CDE2, #EFA3B0); /* Градиентная линия */ /* Градиент фона карточки */
+    border-radius: 15px; /* Закругленные углы карточки */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для блока */
+    overflow: hidden; /* Скрытие переполняющего контента */
+    text-align: center; /* Выравнивание текста по центру */
+    position: relative;
+    margin-bottom: 30px;
+}
+
+/* Область для фото */
+.image-wrapper {
+    width: 100%; /* Ширина области для фото */
+    height: 300px; /* Высота области для фото */
+    display: flex; /* Flexbox для центрирования фото */
+    justify-content: center; /* Центрирование фото по горизонтали */
+    align-items: center; /* Центрирование фото по вертикали */
+    position: relative; /* Относительное позиционирование */
+    background-color: #ececec; /* Светло-серый фон области для фото */
+}
+
+/* Фото */
+.image {
+    width: 250px; /* Ширина фото */
+    height: 250px; /* Высота фото */
+    border-radius: 50%; /* Круглая форма фото */
+    object-fit: cover; /* Обтекание фото внутри круга */
+    border: 7px solid #ffffff; /* Белая рамка вокруг фото */
+}
+
+/* Описание карточки */
+.description {
+    padding: 20px; /* Отступы вокруг текста описания */
+    color: #fdfcfec3; /* Цвет текста описания */
+}
+
+.description h1 {
+    margin: 10px; /* Удаление внешних отступов у заголовка */
+    font-size: 32px; /* Размер шрифта заголовка */
+    color: #fdfcfe /* Розовый цвет заголовка */
+}
+
+.description p {
+    margin: 20px 10px 10 px; /* Отступы вокруг текста описания */
+    font-size: 16px; /* Размер шрифта описания */
+    line-height: 1,3;
+}
+
+/* Центрирование карточки на странице */
+.center-wrapper {
+    display: flex; /* Flexbox для центрирования содержимого */
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center; /* Центрирование по вертикали */
+    height: 100vh; /* Высота области видимости */
+
+}
+.tab-content {
+    margin-top: 20px;
+}
+
+.nav-tabs {
+    border: none; /* Убираем бордеры у вкладок */
+}
+
+.nav-link {
+    border: none; /* Убираем бордеры у каждой вкладки */
+}
+
+
+.nav-tabs .nav-link.active {
+    border-bottom: 2px solid #ff69b4; /* Цвет подчеркивания активной вкладки */
+    color: #070808d6;
+
+}
+.nav-tabs .nav-link {
+    border-bottom: 2px solid transparent; /* Убирает линии у неактивных вкладок */
+    color:  #495057a8;
+    border: none;
+}
+
+.tab-pane {
+    display: grid;
+    place-items: center;
+}
+

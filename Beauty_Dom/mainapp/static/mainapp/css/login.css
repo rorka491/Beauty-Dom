@@ -1,13 +1,3 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .divform {
     background-color: #fff;
     padding: 20px;
@@ -17,17 +7,8 @@ body {
     width: 95%;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-    font-size: 24px;
-}
 
-form p {
-    margin-bottom: 15px;
-}
-
-input[type="text"], input[type="password"] {
+input{
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -35,20 +16,19 @@ input[type="text"], input[type="password"] {
     border-radius: 5px;
 }
 
-button {
+.button-submit {
     width: 100%;
     padding: 10px;
     background: linear-gradient(to left, #B1CDE2, #EFA3B0);
     color: white;
-    border: none;
     border-radius: 5px !important;
     cursor: pointer;
     font-size: 16px;
-
 }
 
-button:hover {
-    background: linear-gradient(to left, #A0BDD4, #D9929F);
+.links a {
+    color: #EFA3B0 !important;
+    text-decoration: none;
 }
 
 p {
@@ -56,26 +36,21 @@ p {
     margin-top: 20px;
 }
 
-a {
-    color: #EFA3B0 !important;
-    text-decoration: none;
-}
-
 a:hover {
     text-decoration: underline;
 }
 
 .logo-container {
-    text-align: center; /* Центрирует содержимое внутри контейнера */
-    margin-bottom: 20px; /* Добавляет отступ снизу для разделения с формой */
+    text-align: center; 
+    margin-bottom: 20px; 
 }
 
 .logo-container img {
-    max-width: 100%; /* Уменьшает размер изображения, если оно превышает ширину контейнера */
-    height: auto; /* Сохраняет пропорции изображения */
+    max-width: 100%; 
+    height: auto; 
 }
 
 h2 {
-    font-weight: 300; /* Чем меньше значение, тем тоньше текст */
+    font-weight: 300; 
 }
 
